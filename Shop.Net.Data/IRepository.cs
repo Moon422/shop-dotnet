@@ -9,9 +9,9 @@ public interface IRepository<T> where T : BaseEntity
     Task<IList<T>> GetAllAsync();
     Task<T?> GetOneByIdAsync(int id);
 
-    Task InsertAsync(T entity);
+    Task InsertAsync(T entity, bool insertImmediately = true);
 
-    Task UpdateAsync(T entity);
+    Task UpdateAsync(T entity, bool updateImmediately = true);
 
-    Task DeleteAsync(T entity);
+    Task DeleteAsync(T entity, bool deleteImmediately = true);
 }

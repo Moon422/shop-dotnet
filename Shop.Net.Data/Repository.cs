@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -7,35 +8,88 @@ namespace Shop.Net.Data;
 
 public class Repository<T> : IRepository<T> where T : BaseEntity
 {
-    public DbSet<T> Table { get; }
+    private readonly ShopDbContext shopDbContext;
+
+    public readonly DbSet<T> Table;
 
     public Repository(ShopDbContext dbContext)
     {
         Table = dbContext.Set<T>();
     }
 
-    public Task<IList<T>> GetAllAsync()
+    public async Task<IList<T>> GetAllAsync()
     {
-        throw new System.NotImplementedException();
+        return await Table.ToListAsync();
     }
 
-    public Task<T?> GetOneByIdAsync(int id)
+    public async Task<T?> GetOneByIdAsync(int id)
     {
-        throw new System.NotImplementedException();
+        return await Table.FindAsync(id);
     }
 
-    public Task InsertAsync(T entity)
+    public async Task InsertAsync(T entity, bool insertImmediately = true)
     {
-        throw new System.NotImplementedException();
+        if (!insertImmediately)
+        {
+            await Table.AddAsync(entity);
+            return;
+        }
+
+        using var transaction = await shopDbContext.Database.BeginTransactionAsync();
+
+        try
+        {
+            await Table.AddAsync(entity);
+            await shopDbContext.SaveChangesAsync();
+            await transaction.CommitAsync();
+        }
+        catch (Exception ex)
+        {
+            await transaction.RollbackAsync();
+        }
     }
 
-    public Task UpdateAsync(T entity)
+    public async Task UpdateAsync(T entity, bool updateImmediately = true)
     {
-        throw new System.NotImplementedException();
+        if (!updateImmediately)
+        {
+            Table.Update(entity);
+            return;
+        }
+
+        using var transaction = await shopDbContext.Database.BeginTransactionAsync();
+
+        try
+        {
+            Table.Update(entity);
+            await shopDbContext.SaveChangesAsync();
+            await transaction.CommitAsync();
+        }
+        catch (Exception ex)
+        {
+            await transaction.RollbackAsync();
+        }
     }
 
-    public Task DeleteAsync(T entity)
+    public async Task DeleteAsync(T entity, bool deleteImmediately = true)
     {
-        throw new System.NotImplementedException();
+        if (!deleteImmediately)
+        {
+            Table.Remove(entity);
+            return;
+        }
+
+        using var transaction = await shopDbContext.Database.BeginTransactionAsync();
+
+        try
+        {
+            Table.Remove(entity);
+            await shopDbContext.SaveChangesAsync();
+            await transaction.CommitAsync();
+        }
+        catch (Exception ex)
+        {
+            await transaction.RollbackAsync();
+        }
     }
 }

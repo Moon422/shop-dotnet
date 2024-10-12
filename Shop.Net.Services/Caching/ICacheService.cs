@@ -6,7 +6,7 @@ namespace Shop.Net.Services.Caching;
 
 public interface ICacheService
 {
-    CacheKey PrepareCacheKey(CacheKey cacheKey, params string[] tokens);
+    CacheKey PrepareCacheKey(CacheKey cacheKey, params object[] tokens);
 
     Task<T?> GetAsync<T>(CacheKey cacheKey, Func<Task<T>> dbCall);
 

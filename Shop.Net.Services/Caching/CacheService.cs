@@ -19,7 +19,7 @@ public class CacheService : ICacheService
         cachePrefixCancellationTokens = new Dictionary<string, CancellationTokenSource>();
     }
 
-    public CacheKey PrepareCacheKey(CacheKey cacheKey, params string[] tokens)
+    public CacheKey PrepareCacheKey(CacheKey cacheKey, params object[] tokens)
     {
         var key = string.Format(cacheKey.Key, tokens);
         return new CacheKey(key, cacheKey.Prefix);

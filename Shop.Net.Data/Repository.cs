@@ -16,6 +16,7 @@ public class Repository<T> : IRepository<T> where T : BaseEntity
 
     public Repository(ShopDbContext dbContext)
     {
+        shopDbContext = dbContext;
         dbSet = dbContext.Set<T>();
     }
 

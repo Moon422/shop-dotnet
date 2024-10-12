@@ -59,9 +59,9 @@ public class Repository<T> : IRepository<T> where T : BaseEntity
         return await dbSet.FindAsync(id);
     }
 
-    public async Task InsertAsync(T entity, bool insertImmediately = true)
+    public async Task InsertAsync(T entity, bool deferInsert = false)
     {
-        if (!insertImmediately)
+        if (deferInsert)
         {
             await dbSet.AddAsync(entity);
             return;
@@ -81,9 +81,9 @@ public class Repository<T> : IRepository<T> where T : BaseEntity
         }
     }
 
-    public async Task UpdateAsync(T entity, bool updateImmediately = true)
+    public async Task UpdateAsync(T entity, bool deferUpdate = false)
     {
-        if (!updateImmediately)
+        if (deferUpdate)
         {
             dbSet.Update(entity);
             return;
@@ -103,9 +103,9 @@ public class Repository<T> : IRepository<T> where T : BaseEntity
         }
     }
 
-    public async Task DeleteAsync(T entity, bool deleteImmediately = true)
+    public async Task DeleteAsync(T entity, bool deferDelete = false)
     {
-        if (!deleteImmediately)
+        if (deferDelete)
         {
             dbSet.Remove(entity);
             return;

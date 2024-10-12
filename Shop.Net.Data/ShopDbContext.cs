@@ -9,6 +9,9 @@ public class ShopDbContext : DbContext
     public DbSet<StateProvince> StateProvinces { get; set; }
     public DbSet<City> Cities { get; set; }
 
+    public ShopDbContext(DbContextOptions options) : base(options)
+    { }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Country>(entity =>

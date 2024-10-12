@@ -12,9 +12,9 @@ watch:
 	$(cc) watch run --project $(api_proj)
 
 migrate:
-	$(cc) ef migrations add "$(name)" --project $(api_proj) 
-	$(cc) ef database update --project $(api_proj) 
-	git add $(proj)/Migrations 
+	$(cc) ef migrations add "$(name)" --project $(data_proj) 
+	$(cc) ef database update --project $(data_proj) 
+	git add $(data_proj)/Migrations 
 	git commit -m "$(name)" 
 
 publish:

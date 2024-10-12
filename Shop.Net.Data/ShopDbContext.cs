@@ -21,6 +21,7 @@ public class ShopDbContext : DbContext
     public DbSet<CustomerRoleMapping> CustomerRoleMappings { get; set; }
     public DbSet<CustomerPermission> CustomerPermissions { get; set; }
     public DbSet<RolePermission> RolePermissions { get; set; }
+    public DbSet<Password> Passwords { get; set; }
 
     public ShopDbContext(DbContextOptions options) : base(options)
     { }
@@ -55,6 +56,11 @@ public class ShopDbContext : DbContext
                 .WithMany(r => r.Customers)
                 .UsingEntity<CustomerRoleMapping>(r => r.HasOne(e => e.Role).WithMany().HasForeignKey(e => e.RoleId).IsRequired(),
                     l => l.HasOne(e => e.Customer).WithMany().HasForeignKey(e => e.CustomerId).IsRequired());
+
+            entity.HasOne(c => c.Password)
+                .WithOne(p => p.customer)
+                .HasForeignKey<Password>(p => p.CustomerId)
+                .IsRequired();
         });
 
         base.OnModelCreating(modelBuilder);

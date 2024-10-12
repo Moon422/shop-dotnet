@@ -28,6 +28,16 @@ public class ShopDbContext : DbContext
                 .IsFixedLength();
         });
 
+        modelBuilder.Entity<Product>(entity =>
+        {
+            entity.HasMany(p => p.Categories)
+                .WithMany(c => c.Products)
+                .UsingEntity<ProductCategoryMapping>(
+                    r => r.HasOne(e => e.Category).WithMany().HasForeignKey(e => e.CategoryId).IsRequired(),
+                    l => l.HasOne(e => e.Product).WithMany().HasForeignKey(e => e.ProductId).IsRequired()
+                );
+        });
+
         base.OnModelCreating(modelBuilder);
     }
 }

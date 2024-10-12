@@ -1,6 +1,6 @@
-﻿namespace Shop.Net.Core;
+﻿namespace Shop.Net.Core.Domains.Inventory;
 
-public class Class1
+public class Product
 {
 
 }

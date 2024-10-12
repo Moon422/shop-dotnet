@@ -9,6 +9,7 @@ public class ShopDbContext : DbContext
     public DbSet<Country> Countries { get; set; }
     public DbSet<Division> StateProvinces { get; set; }
     public DbSet<District> Cities { get; set; }
+    public DbSet<Address> Addresses { get; set; }
 
     public DbSet<Product> Products { get; set; }
     public DbSet<Category> Categories { get; set; }

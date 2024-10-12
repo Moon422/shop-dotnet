@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Shop.Net.Core.Domains.Inventory;
+namespace Shop.Net.Core.Domains.Inventories;
 
 public class Category : BaseEntity, CreationLoggedEntity, ModificationLoggedEntity
 {

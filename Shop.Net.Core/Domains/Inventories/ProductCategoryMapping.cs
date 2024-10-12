@@ -1,4 +1,4 @@
-namespace Shop.Net.Core.Domains.Inventory;
+namespace Shop.Net.Core.Domains.Inventories;
 
 public class ProductCategoryMapping : BaseEntity
 {

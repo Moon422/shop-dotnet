@@ -8,5 +8,5 @@ public class Password : BaseEntity
     public string PasswordHash { get; set; }
 
     public int CustomerId { get; set; }
-    public Customer customer { get; set; }
+    public Customer Customer { get; set; }
 }

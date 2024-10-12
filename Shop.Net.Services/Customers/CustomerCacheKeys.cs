@@ -10,5 +10,5 @@ public static class CustomerCacheKeys
         "Shop.Net.Customers.GetCustomerById.{0}", PREFIX);
 
     public static CacheKey GetPasswordByCustomerIdKey => new CacheKey(
-        "Shop.Net.Customers.GetPasswordByCustomer.{0}", PREFIX);
+        "Shop.Net.Customers.GetPasswordByCustomerId.{0}", PREFIX);
 }

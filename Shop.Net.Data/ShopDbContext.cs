@@ -1,6 +1,8 @@
-﻿namespace Shop.Net.Data;
+﻿using Microsoft.EntityFrameworkCore;
 
-public class ShopDbContext
+namespace Shop.Net.Data;
+
+public class ShopDbContext : DbContext
 {
 
 }

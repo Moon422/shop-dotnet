@@ -5,5 +5,5 @@ namespace Shop.Net.Data;
 
 public interface ITransactionManager
 {
-    Task RunTransactionAsync(Func<Task> transactionQuery);
+    Task RunTransactionAsync(Func<Task> transactionOperation);
 }

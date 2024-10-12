@@ -11,9 +11,9 @@ public interface IPasswordService
 
     Task<Password?> GetPasswordByCustomerIdAsync(int customerId);
 
-    Task InsertPasswordAsync(Password entity, bool deferDbInsert = true);
+    Task InsertPasswordAsync(Password entity, bool deferDbInsert = true, bool deferCacheClear = false);
 
-    Task UpdatePasswordAsync(Password entity, bool deferDbUpdate = true);
+    Task UpdatePasswordAsync(Password entity, bool deferDbUpdate = true, bool deferCacheClear = false);
 
-    Task DeletePasswordAsync(Password entity, bool deferDbDelete = true);
+    Task DeletePasswordAsync(Password entity, bool deferDbDelete = true, bool deferCacheClear = false);
 }

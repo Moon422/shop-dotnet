@@ -12,13 +12,13 @@ public class TransactionManager : ITransactionManager
         this.shopDbContext = shopDbContext;
     }
 
-    public async Task RunTransactionAsync(Func<Task> transactionQuery)
+    public async Task RunTransactionAsync(Func<Task> transactionOperation)
     {
         using var transaction = await shopDbContext.Database.BeginTransactionAsync();
 
         try
         {
-            await transactionQuery();
+            await transactionOperation();
             await shopDbContext.SaveChangesAsync();
             await transaction.CommitAsync();
         }

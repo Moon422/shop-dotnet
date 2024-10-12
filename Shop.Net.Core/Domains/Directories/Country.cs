@@ -9,9 +9,14 @@ public class Country : BaseEntity, CreationLoggedEntity, ModificationLoggedEntit
     [MaxLength(72)]
     public string Name { get; set; }
 
+    [MaxLength(3)]
     public string ThreeLetterCode { get; set; }
 
+    [MaxLength(2)]
     public string TwoLetterCode { get; set; }
+
+    [MaxLength(3)]
+    public string PhoneCode { get; set; }
 
     public DateTime CreatedOn { get; set; }
 

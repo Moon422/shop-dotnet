@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Shop.Net.Core.Domains.Inventories;
 
-public class Category : BaseEntity, CreationLoggedEntity, ModificationLoggedEntity
+public class Category : BaseEntity, ICreationLoggedEntity, IModificationLoggedEntity
 {
     [MaxLength(64)]
     public string Name { get; set; }

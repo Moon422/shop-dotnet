@@ -7,12 +7,18 @@ public abstract class BaseEntity
     public int Id { get; set; }
 }
 
-public interface CreationLoggedEntity
+public interface ICreationLoggedEntity
 {
     DateTime CreatedOn { get; set; }
 }
 
-public interface ModificationLoggedEntity
+public interface IModificationLoggedEntity
 {
     DateTime ModifiedOn { get; set; }
+}
+
+public interface ISoftDeletedEntity
+{
+    public bool IsDeleted { get; set; }
+    DateTime DeletedOn { get; set; }
 }

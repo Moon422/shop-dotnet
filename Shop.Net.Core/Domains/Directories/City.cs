@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Shop.Net.Core.Domains.Directories;
 
-public class City : BaseEntity, CreationLoggedEntity, ModificationLoggedEntity
+public class City : BaseEntity, ICreationLoggedEntity, IModificationLoggedEntity
 {
     [MaxLength(72)]
     public string Name { get; set; }

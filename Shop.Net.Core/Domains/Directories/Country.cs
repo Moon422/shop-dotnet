@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Shop.Net.Core.Domains.Directories;
 
-public class Country : BaseEntity, CreationLoggedEntity, ModificationLoggedEntity
+public class Country : BaseEntity, ICreationLoggedEntity, IModificationLoggedEntity
 {
     [MaxLength(72)]
     public string Name { get; set; }

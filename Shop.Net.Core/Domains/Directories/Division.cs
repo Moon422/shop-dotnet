@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Shop.Net.Core.Domains.Directories;
 
-public class StateProvince : BaseEntity, ICreationLoggedEntity, IModificationLoggedEntity
+public class Division : BaseEntity, ICreationLoggedEntity, IModificationLoggedEntity
 {
     [MaxLength(72)]
     public string Name { get; set; }
@@ -16,5 +16,5 @@ public class StateProvince : BaseEntity, ICreationLoggedEntity, IModificationLog
     public int CountryId { get; set; }
     public Country Country { get; set; }
 
-    public ICollection<City> Cities { get; set; }
+    public ICollection<District> Districts { get; set; }
 }

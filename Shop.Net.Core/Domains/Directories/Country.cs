@@ -22,5 +22,5 @@ public class Country : BaseEntity, ICreationLoggedEntity, IModificationLoggedEnt
 
     public DateTime ModifiedOn { get; set; }
 
-    public ICollection<StateProvince> StateProvinces { get; set; }
+    public ICollection<Division> Divisions { get; set; }
 }

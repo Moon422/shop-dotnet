@@ -16,6 +16,7 @@ migrate:
 	$(cc) ef database update --project $(data_proj) 
 	git add $(data_proj)/Migrations 
 	git commit -m "$(name)" 
+	git push origin main 
 
 publish:
 	$(cc) publish -c Release -r linux-x64 --self-contained -o /var/www/$(app) 

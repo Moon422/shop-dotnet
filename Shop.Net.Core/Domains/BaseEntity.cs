@@ -1,3 +1,5 @@
+using System;
+
 namespace Shop.Net.Core.Domains;
 
 public abstract class BaseEntity

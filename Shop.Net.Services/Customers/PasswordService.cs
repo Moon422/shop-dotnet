@@ -17,6 +17,16 @@ public class PasswordService : IPasswordService
         this.applicationSettings = applicationSettings;
     }
 
+    public string HashPassword(string rawPassword)
+    {
+        return BCrypt.Net.BCrypt.HashPassword(rawPassword);
+    }
+
+    public bool VerifyPassword(string rawPassword, string hashedPassword)
+    {
+        return BCrypt.Net.BCrypt.Verify(rawPassword, hashedPassword);
+    }
+
     public async Task<Password?> GetPasswordByCustomerIdAsync(int customerId)
     {
         return customerId > 0 ?

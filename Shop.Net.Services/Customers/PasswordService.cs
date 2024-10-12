@@ -5,6 +5,8 @@ using Shop.Net.Core.Configurations;
 using Shop.Net.Core.Domains.Customers;
 using Shop.Net.Data;
 
+namespace Shop.Net.Services.Customers;
+
 public class PasswordService : IPasswordService
 {
     protected readonly IRepository<Password> passwordRepository;

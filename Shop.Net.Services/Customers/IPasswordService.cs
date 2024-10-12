@@ -1,6 +1,8 @@
 using System.Threading.Tasks;
 using Shop.Net.Core.Domains.Customers;
 
+namespace Shop.Net.Services.Customers;
+
 public interface IPasswordService
 {
     string HashPassword(string rawPassword);

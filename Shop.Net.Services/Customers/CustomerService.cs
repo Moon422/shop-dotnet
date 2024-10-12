@@ -1,0 +1,1 @@
+namespace Shop.Net.Services.Customers;

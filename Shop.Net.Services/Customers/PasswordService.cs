@@ -35,10 +35,19 @@ public class PasswordService : IPasswordService
 
     public async Task<Password?> GetPasswordByCustomerIdAsync(int customerId)
     {
-        return customerId > 0 ?
-            await passwordRepository.Table
-                .FirstOrDefaultAsync(p => p.CustomerId == customerId) :
+        if (customerId <= 0)
+        {
             throw new ArgumentException($"{nameof(customerId)} cannot be zero or less than zero");
+        }
+
+        var cacheKey = cacheService.PrepareCacheKey(CustomerCacheKeys.GetPasswordByCustomerIdKey,
+            customerId);
+
+        return await cacheService.GetAsync(cacheKey, async () =>
+        {
+            return await passwordRepository.Table
+                .FirstOrDefaultAsync(p => p.CustomerId == customerId);
+        });
     }
 
     public async Task InsertPasswordAsync(Password entity, bool deferDbInsert = true, bool deferCacheClear = false)

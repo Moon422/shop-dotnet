@@ -38,4 +38,6 @@ public class Customer : BaseEntity, ICreationLoggedEntity, IModificationLoggedEn
     public ICollection<Role> Roles { get; set; }
 
     public ICollection<CustomerPermission> CustomerPermissions { get; set; }
+
+    public Password Password { get; set; }
 }

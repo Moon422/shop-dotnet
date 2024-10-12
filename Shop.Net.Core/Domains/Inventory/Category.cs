@@ -1,10 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace Shop.Net.Core.Domains.Inventory;
 
-public class Product : BaseEntity, CreationLoggedEntity, ModificationLoggedEntity
+public class Category : BaseEntity, CreationLoggedEntity, ModificationLoggedEntity
 {
-    [MaxLength(128)]
+    [MaxLength(64)]
     public string Name { get; set; }
 
     [MaxLength(280)]
@@ -13,11 +13,9 @@ public class Product : BaseEntity, CreationLoggedEntity, ModificationLoggedEntit
     [MaxLength(1024)]
     public string LongDescription { get; set; }
 
-    public decimal BasePrice { get; set; }
+    public ICollection<Product> Products { get; set; }
 
     public DateTime CreatedOn { get; set; }
 
     public DateTime ModifiedOn { get; set; }
-
-    public ICollection<Category> Categories { get; set; }
 }

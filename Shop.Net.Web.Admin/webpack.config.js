@@ -1,4 +1,5 @@
 const path = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
     mode: 'development', // Switch to 'production' when you're ready to deploy
@@ -12,7 +13,11 @@ module.exports = {
         rules: [
             {
                 test: /\.css$/, // For processing CSS files
-                use: ['style-loader', 'css-loader', 'postcss-loader'], // Use PostCSS for Tailwind
+                use: [
+                    MiniCssExtractPlugin.loader, // Extract CSS to separate file
+                    'css-loader',
+                    'postcss-loader', // PostCSS for Tailwind CSS
+                ],
             },
             {
                 test: /\.(png|jpg|gif|svg)$/, // For handling images (if needed)
@@ -23,6 +28,11 @@ module.exports = {
             }
         ]
     },
+    plugins: [
+        new MiniCssExtractPlugin({
+            filename: '../css/styles.css', // Output CSS to wwwroot/css
+        }),
+    ],
     devtool: 'source-map',
     watch: true
 };

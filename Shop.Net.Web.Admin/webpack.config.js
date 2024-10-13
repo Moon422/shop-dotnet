@@ -14,9 +14,9 @@ module.exports = {
             {
                 test: /\.css$/, // For processing CSS files
                 use: [
-                    MiniCssExtractPlugin.loader, // Extract CSS to separate file
+                    MiniCssExtractPlugin.loader, // Extract CSS into a separate file
                     'css-loader',
-                    'postcss-loader', // PostCSS for Tailwind CSS
+                    'postcss-loader' // Use PostCSS to process Tailwind CSS
                 ],
             },
             {
@@ -30,7 +30,7 @@ module.exports = {
     },
     plugins: [
         new MiniCssExtractPlugin({
-            filename: '../css/styles.css', // Output CSS to wwwroot/css
+            filename: '../css/styles.css', // Output CSS to wwwroot/css directory
         }),
     ],
     devtool: 'source-map',

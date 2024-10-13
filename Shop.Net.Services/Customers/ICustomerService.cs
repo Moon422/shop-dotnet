@@ -13,5 +13,7 @@ public interface ICustomerService
 
     Task DeleteCustomerAsync(Customer customer, bool deferDbDelete = false, bool deferCacheClear = false);
 
-    Task<Customer> RegisterCustomer(Customer customer, Password password);
+    Task<Customer> RegisterCustomerAsync(Customer customer, Password password);
+
+    Task<Customer?> LoginCustomerAsync(string email, string password);
 }

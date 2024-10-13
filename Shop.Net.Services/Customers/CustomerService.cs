@@ -9,7 +9,7 @@ using Shop.Net.Services.Caching;
 
 namespace Shop.Net.Services.Customers;
 
-public class CustomerService
+public class CustomerService : ICustomerService
 {
     protected readonly IRepository<Customer> customerRepository;
     protected readonly ITransactionManager transactionManager;
@@ -99,7 +99,7 @@ public class CustomerService
         }
     }
 
-    public async Task<Customer> Register(Customer customer, Password password)
+    public async Task<Customer> RegisterCustomerAsync(Customer customer, Password password)
     {
         ArgumentNullException.ThrowIfNull(customer);
         ArgumentNullException.ThrowIfNull(password);
@@ -114,7 +114,7 @@ public class CustomerService
         return customer;
     }
 
-    public async Task<Customer?> Login(string email, string password)
+    public async Task<Customer?> LoginCustomerAsync(string email, string password)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(email);
         ArgumentException.ThrowIfNullOrWhiteSpace(password);

@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shop.Net.Data", "Shop.Net.D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shop.Net.Services", "Shop.Net.Services\Shop.Net.Services.csproj", "{AFCF8C86-6D74-4777-944F-B85DAB620399}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shop.Net.Web.Admin", "Shop.Net.Web.Admin\Shop.Net.Web.Admin.csproj", "{B8680FAA-E162-4645-9251-DF932D6C2709}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{AFCF8C86-6D74-4777-944F-B85DAB620399}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AFCF8C86-6D74-4777-944F-B85DAB620399}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AFCF8C86-6D74-4777-944F-B85DAB620399}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8680FAA-E162-4645-9251-DF932D6C2709}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8680FAA-E162-4645-9251-DF932D6C2709}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8680FAA-E162-4645-9251-DF932D6C2709}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8680FAA-E162-4645-9251-DF932D6C2709}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

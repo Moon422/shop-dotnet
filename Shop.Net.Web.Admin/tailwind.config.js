@@ -2,7 +2,7 @@
 module.exports = {
   purge: ['./Views/**/*.cshtml', './Scripts/**/*.js'],
   darkMode: false,
-  content: [],
+  content: ['./Views/**/*.cshtml', './src/**/*.{js,css}'],
   theme: {
     extend: {},
   },

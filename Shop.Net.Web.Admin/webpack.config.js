@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
     mode: 'development', // Switch to 'production' when you're ready to deploy
-    entry: './src/app.js', // Main entry point for your JS
+    entry: './src/js/app.js', // Main entry point for your JS
     output: {
         filename: 'app.bundle.js', // Output bundled JS file
         path: path.resolve(__dirname, 'wwwroot/js'), // Output directory
@@ -23,5 +23,6 @@ module.exports = {
             }
         ]
     },
-    devtool: 'source-map', // Optional: for easier debugging in development
+    devtool: 'source-map',
+    watch: true
 };

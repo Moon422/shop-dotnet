@@ -1,15 +1,15 @@
 proj=Shop.Net
 data_proj=$(proj).Data
 api_proj=$(proj).API
-mvc_proj=$(proj).Web
+mvc_proj=$(proj).Web.Admin
 cc=dotnet
 app=app
 
 run:
-	$(cc) run --project $(api_proj) 
+	$(cc) run --project $(mvc_proj) 
 
 watch:
-	$(cc) watch run --project $(api_proj)
+	$(cc) watch run --project $(mvc_proj)
 
 migrate:
 	$(cc) ef migrations add "$(name)" --project $(data_proj) --startup-project $(data_proj)

@@ -58,7 +58,7 @@ public class ShopDbContext : DbContext
                     l => l.HasOne(e => e.Customer).WithMany().HasForeignKey(e => e.CustomerId).IsRequired());
 
             entity.HasOne(c => c.Password)
-                .WithOne(p => p.customer)
+                .WithOne(p => p.Customer)
                 .HasForeignKey<Password>(p => p.CustomerId)
                 .IsRequired();
         });

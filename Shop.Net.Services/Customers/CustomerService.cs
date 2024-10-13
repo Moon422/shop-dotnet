@@ -1,7 +1,10 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Shop.Net.Core.Domains.Customers;
 using Shop.Net.Data;
+using Shop.Net.Data.Exceptions;
 using Shop.Net.Services.Caching;
 
 namespace Shop.Net.Services.Customers;
@@ -24,6 +27,25 @@ public class CustomerService
         this.passwordService = passwordService;
     }
 
+    protected async Task<Customer?> GetCustomerByEmailAsync(string email, bool skipInactive = true)
+    {
+        var cacheKey = cacheService.PrepareCacheKey(CustomerCacheKeys.GetCustomerByEmailKey,
+            email, skipInactive);
+
+        return await cacheService.GetAsync(cacheKey,
+            async () =>
+            {
+                var query = customerRepository.Table;
+
+                if (skipInactive)
+                {
+                    query = query.Where(c => !c.IsDeleted);
+                }
+
+                return await query.FirstOrDefaultAsync();
+            });
+    }
+
     public async Task<Customer?> GetCustomerByIdAsync(int customerId)
     {
         if (customerId <= 0)
@@ -41,6 +63,12 @@ public class CustomerService
     public async Task InsertCustomerAsync(Customer customer, bool deferDbInsert = false, bool deferCacheClear = false)
     {
         ArgumentNullException.ThrowIfNull(customer);
+
+        var existing = await GetCustomerByEmailAsync(customer.Email);
+        if (existing is not null)
+        {
+            throw new EntityDuplicateException();
+        }
 
         await customerRepository.InsertAsync(customer, deferDbInsert);
         if (!deferCacheClear)
@@ -71,7 +99,7 @@ public class CustomerService
         }
     }
 
-    public async Task RegisterCustomer(Customer customer, Password password)
+    public async Task<Customer> Register(Customer customer, Password password)
     {
         ArgumentNullException.ThrowIfNull(customer);
         ArgumentNullException.ThrowIfNull(password);
@@ -83,5 +111,31 @@ public class CustomerService
         });
 
         cacheService.RemoveByPrefix(CustomerCacheKeys.PREFIX);
+        return customer;
+    }
+
+    public async Task<Customer?> Login(string email, string password)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(email);
+        ArgumentException.ThrowIfNullOrWhiteSpace(password);
+
+        var customer = await GetCustomerByEmailAsync(email);
+        if (customer is null)
+        {
+            return null;
+        }
+
+        var passwordEntity = await passwordService.GetPasswordByCustomerIdAsync(customer.Id);
+        if (passwordEntity is null)
+        {
+            return null;
+        }
+
+        if (!passwordService.VerifyPassword(password, passwordEntity.PasswordHash))
+        {
+            return null;
+        }
+
+        return customer;
     }
 }

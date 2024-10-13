@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Shop.Net.Core.Domains;
+using Shop.Net.Core.Domains.Customers;
 
 namespace Shop.Net.Data;
 
@@ -56,11 +58,17 @@ public class Repository<T> : IRepository<T> where T : BaseEntity
 
     public async Task<T?> GetOneByIdAsync(int id)
     {
+        if (id <= 0)
+        {
+            throw new ArgumentException($"{nameof(id)} cannot be zero or negative");
+        }
         return await dbSet.FindAsync(id);
     }
 
     public async Task InsertAsync(T entity, bool deferInsert = false)
     {
+        ArgumentNullException.ThrowIfNull(entity);
+
         if (deferInsert)
         {
             await dbSet.AddAsync(entity);
@@ -83,6 +91,8 @@ public class Repository<T> : IRepository<T> where T : BaseEntity
 
     public async Task UpdateAsync(T entity, bool deferUpdate = false)
     {
+        ArgumentNullException.ThrowIfNull(entity);
+
         if (deferUpdate)
         {
             dbSet.Update(entity);
@@ -105,6 +115,8 @@ public class Repository<T> : IRepository<T> where T : BaseEntity
 
     public async Task DeleteAsync(T entity, bool deferDelete = false)
     {
+        ArgumentNullException.ThrowIfNull(entity);
+
         if (deferDelete)
         {
             dbSet.Remove(entity);

@@ -15,12 +15,15 @@ namespace Shop.Net.Web.Admin.Configurations;
 public class AuthController : Controller
 {
     protected readonly ICustomerService customerService;
+    protected readonly IPasswordService passwordService;
     protected readonly IAuthModelFactory authModelFactory;
 
     public AuthController(ICustomerService customerService,
+        IPasswordService passwordService,
         IAuthModelFactory authModelFactory)
     {
         this.customerService = customerService;
+        this.passwordService = passwordService;
         this.authModelFactory = authModelFactory;
     }
 
@@ -81,7 +84,7 @@ public class AuthController : Controller
 
     public async Task<IActionResult> Register(string returnUrl)
     {
-        var model = new RegisterModel();
+        var model = await authModelFactory.PrepareRegisterModelAsync(new RegisterModel());
         return View(model);
     }
 
@@ -89,6 +92,38 @@ public class AuthController : Controller
     [ActionName("Register")]
     public async Task<IActionResult> RegisterRequest(RegisterModel model, string returnUrl)
     {
-        return View(model);
+        if (string.IsNullOrWhiteSpace(model.Password) || string.IsNullOrWhiteSpace(model.ConfirmPassword) || !string.Equals(model.Password, model.ConfirmPassword))
+        {
+            ModelState.AddModelError(nameof(RegisterModel.Password), "Invalid Password");
+        }
+
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+
+        var customer = new Customer()
+        {
+            FirstName = model.FirstName,
+            LastName = model.LastName,
+            Gender = (Gender)model.GenderId,
+            PhoneNumber = model.PhoneNumber,
+            Email = model.Email
+        };
+
+        var password = new Password()
+        {
+            PasswordHash = passwordService.HashPassword(model.Password)
+        };
+
+        customer = await customerService.RegisterCustomerAsync(customer, password);
+        await SignInAsync(customer, false);
+
+        if (string.IsNullOrWhiteSpace(returnUrl))
+        {
+            return RedirectToAction("Index", "Home");
+        }
+
+        return Redirect(returnUrl);
     }
 }

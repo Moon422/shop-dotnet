@@ -19,6 +19,7 @@ public class Customer : BaseEntity, ICreationLoggedEntity, IModificationLoggedEn
     public string PhoneNumber { get; set; }
 
     [MaxLength(128)]
+    [EmailAddress]
     public string Email { get; set; }
 
     public int? DefaultBillingAddressId { get; set; }

@@ -69,6 +69,16 @@ public class Repository<T> : IRepository<T> where T : BaseEntity
     {
         ArgumentNullException.ThrowIfNull(entity);
 
+        if (entity is ICreationLoggedEntity c)
+        {
+            c.CreatedOn = DateTime.UtcNow;
+        }
+
+        if (entity is IModificationLoggedEntity m)
+        {
+            m.ModifiedOn = DateTime.UtcNow;
+        }
+
         if (deferInsert)
         {
             await dbSet.AddAsync(entity);
@@ -93,6 +103,11 @@ public class Repository<T> : IRepository<T> where T : BaseEntity
     {
         ArgumentNullException.ThrowIfNull(entity);
 
+        if (entity is IModificationLoggedEntity m)
+        {
+            m.ModifiedOn = DateTime.UtcNow;
+        }
+
         if (deferUpdate)
         {
             dbSet.Update(entity);
@@ -116,6 +131,14 @@ public class Repository<T> : IRepository<T> where T : BaseEntity
     public async Task DeleteAsync(T entity, bool deferDelete = false)
     {
         ArgumentNullException.ThrowIfNull(entity);
+
+        var softDeleted = entity as ISoftDeletedEntity;
+        if (softDeleted is not null)
+        {
+            softDeleted.DeletedOn = DateTime.UtcNow;
+            await UpdateAsync(entity, deferDelete);
+            return;
+        }
 
         if (deferDelete)
         {

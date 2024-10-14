@@ -107,6 +107,8 @@ public class CustomerService : ICustomerService
         await transactionManager.RunTransactionAsync(async () =>
         {
             await InsertCustomerAsync(customer, true, true);
+
+            password.Customer = customer;
             await passwordService.InsertPasswordAsync(password, true, true);
         });
 

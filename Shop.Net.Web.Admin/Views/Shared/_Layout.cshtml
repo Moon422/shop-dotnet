@@ -18,6 +18,9 @@
     </div>
     <script src="~/js/app.bundle.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
+    <!-- Render footer scripts -->
+    @Html.Raw(ScriptTagHelper.RenderFooterScripts())
 </body>
 
 </html>

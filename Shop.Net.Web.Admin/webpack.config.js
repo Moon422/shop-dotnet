@@ -1,30 +1,31 @@
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
-    mode: 'development', // Switch to 'production' when you're ready to deploy
-    entry: './src/js/app.js', // Main entry point for your JS
+    mode: 'development',
+    entry: './src/js/app.js',
     output: {
-        filename: 'app.bundle.js', // Output bundled JS file
-        path: path.resolve(__dirname, 'wwwroot/js'), // Output directory
-        publicPath: '/js/' // Public path for assets
+        filename: 'app.bundle.js',
+        path: path.resolve(__dirname, 'wwwroot/js'),
+        publicPath: '/js/'
     },
     module: {
         rules: [
             {
-                test: /\.css$/, // For processing CSS files
+                test: /\.css$/,
                 use: [
-                    MiniCssExtractPlugin.loader, // Extract CSS into a separate file
+                    MiniCssExtractPlugin.loader,
                     'css-loader',
-                    'postcss-loader' // Use PostCSS to process Tailwind CSS
+                    'postcss-loader'
                 ],
             },
             {
-                test: /\.(png|jpg|gif|svg)$/, // For handling images (if needed)
+                test: /\.(png|jpg|gif|svg)$/,
                 type: 'asset/resource',
                 generator: {
-                    filename: 'images/[hash][ext][query]', // Save images in 'images' folder with hashed names
+                    filename: 'images/[hash][ext][query]',
                 }
             }
         ]
@@ -36,9 +37,22 @@ module.exports = {
             ]
         }),
         new MiniCssExtractPlugin({
-            filename: '../css/styles.css', // Output CSS to wwwroot/css directory
+            filename: '../css/styles.css',
         }),
     ],
+    optimization: {
+        minimize: true,
+        minimizer: [
+            new TerserPlugin({
+                terserOptions: {
+                    compress: {
+                        drop_console: true,
+                    },
+                },
+            }),
+            // new CssMinimizerPlugin()
+        ],
+    },
     devtool: 'source-map',
     watch: true
 };

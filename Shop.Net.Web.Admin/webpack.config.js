@@ -31,11 +31,11 @@ module.exports = {
         ]
     },
     plugins: [
-        new CopyWebpackPlugin({
-            patterns: [
+        // new CopyWebpackPlugin({
+        //     patterns: [
 
-            ]
-        }),
+        //     ]
+        // }),
         new MiniCssExtractPlugin({
             filename: '../css/styles.css',
         }),

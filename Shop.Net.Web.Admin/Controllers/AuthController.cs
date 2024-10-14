@@ -49,7 +49,7 @@ public class AuthController : Controller
 
     public async Task<IActionResult> Login(string returnUrl = "")
     {
-        var model = authModelFactory.PrepareLoginModelAsync(new LoginModel());
+        var model = await authModelFactory.PrepareLoginModelAsync(new LoginModel());
         return View(model);
     }
 
@@ -71,6 +71,24 @@ public class AuthController : Controller
 
         await SignInAsync(customer, model.IsPersistent);
 
+        if (string.IsNullOrWhiteSpace(returnUrl))
+        {
+            return RedirectToAction("Index", "Home");
+        }
 
+        return Redirect(returnUrl);
+    }
+
+    public async Task<IActionResult> Register(string returnUrl)
+    {
+        var model = new RegisterModel();
+        return View(model);
+    }
+
+    [HttpPost]
+    [ActionName("Register")]
+    public async Task<IActionResult> RegisterRequest(RegisterModel model, string returnUrl)
+    {
+        return View(model);
     }
 }

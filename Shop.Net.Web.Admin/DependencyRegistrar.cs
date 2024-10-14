@@ -1,4 +1,6 @@
 using System;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,6 +9,7 @@ using Shop.Net.Data;
 using Shop.Net.Services.Caching;
 using Shop.Net.Services.Customers;
 using Shop.Net.Web.Admin.Configurations;
+using Shop.Net.Web.Admin.Factories;
 
 namespace Shop.Net.Web.Admin;
 
@@ -26,6 +29,21 @@ public static class DependencyRegistrar
             options.UseMySql(connectionString, serverVersion);
         });
 
+        services.AddHttpContextAccessor();
+
+        var authenticationConfigurations = configuration.GetSection("Authentication");
+
+        services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(options =>
+            {
+                options.Cookie.Name = "auth";
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(authenticationConfigurations?.GetValue<int?>("ExpireTimeSpan") ?? 30);
+                options.LoginPath = "/Auth/Login";
+                options.LogoutPath = "/Auth/Logout";
+                options.SlidingExpiration = true;
+            });
+
+
         services.AddSingleton<IApplicationSettings, ApplicationSettings>();
 
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
@@ -34,5 +52,14 @@ public static class DependencyRegistrar
         services.AddScoped<ICacheService, CacheService>();
         services.AddScoped<ICustomerService, CustomerService>();
         services.AddScoped<IPasswordService, PasswordService>();
+
+        services.AddScoped<IAuthModelFactory, AuthModelFactory>();
     }
+
+    public static void ConfigureApplication(this IApplicationBuilder app)
+    {
+        app.UseAuthentication();
+        app.UseAuthorization();
+    }
+
 }

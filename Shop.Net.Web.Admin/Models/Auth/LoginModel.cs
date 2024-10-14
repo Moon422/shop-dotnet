@@ -16,5 +16,5 @@ public record LoginModel
     public string Password { get; set; }
 
     [Display(Name = "Remember Me")]
-    public bool Remember { get; set; }
+    public bool IsPersistent { get; set; }
 }

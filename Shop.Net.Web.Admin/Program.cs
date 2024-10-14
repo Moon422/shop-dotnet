@@ -25,7 +25,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthorization();
+app.ConfigureApplication();
 
 app.MapControllerRoute(
     name: "default",

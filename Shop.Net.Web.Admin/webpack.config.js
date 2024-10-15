@@ -31,11 +31,11 @@ module.exports = {
         ]
     },
     plugins: [
-        // new CopyWebpackPlugin({
-        //     patterns: [
-
-        //     ]
-        // }),
+        new CopyWebpackPlugin({
+            patterns: [
+                { from: './node_modules/jquery/dist', to: path.resolve(__dirname, 'wwwroot/lib/jquery') },
+            ]
+        }),
         new MiniCssExtractPlugin({
             filename: '../css/styles.css',
         }),

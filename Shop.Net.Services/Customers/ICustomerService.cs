@@ -7,13 +7,11 @@ public interface ICustomerService
 {
     Task<Customer?> GetCustomerByIdAsync(int customerId);
 
+    Task<Customer?> GetCustomerByEmailAsync(string email, bool skipInactive = true);
+
     Task InsertCustomerAsync(Customer customer, bool deferDbInsert = false, bool deferCacheClear = false);
 
     Task UpdateCustomerAsync(Customer customer, bool deferDbUpdate = false, bool deferCacheClear = false);
 
     Task DeleteCustomerAsync(Customer customer, bool deferDbDelete = false, bool deferCacheClear = false);
-
-    Task<Customer> RegisterCustomerAsync(Customer customer, Password password);
-
-    Task<Customer?> LoginCustomerAsync(string email, string password);
 }

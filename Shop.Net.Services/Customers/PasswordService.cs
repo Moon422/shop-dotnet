@@ -50,7 +50,7 @@ public class PasswordService : IPasswordService
         });
     }
 
-    public async Task InsertPasswordAsync(Password entity, bool deferDbInsert = true, bool deferCacheClear = false)
+    public async Task InsertPasswordAsync(Password entity, bool deferDbInsert = false, bool deferCacheClear = false)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
@@ -61,7 +61,7 @@ public class PasswordService : IPasswordService
         }
     }
 
-    public async Task UpdatePasswordAsync(Password entity, bool deferDbUpdate = true, bool deferCacheClear = false)
+    public async Task UpdatePasswordAsync(Password entity, bool deferDbUpdate = false, bool deferCacheClear = false)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
@@ -72,7 +72,7 @@ public class PasswordService : IPasswordService
         }
     }
 
-    public async Task DeletePasswordAsync(Password entity, bool deferDbDelete = true, bool deferCacheClear = false)
+    public async Task DeletePasswordAsync(Password entity, bool deferDbDelete = false, bool deferCacheClear = false)
     {
         ArgumentNullException.ThrowIfNull(entity);
 

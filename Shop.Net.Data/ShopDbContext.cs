@@ -22,6 +22,7 @@ public class ShopDbContext : DbContext
     public DbSet<CustomerPermission> CustomerPermissions { get; set; }
     public DbSet<RolePermission> RolePermissions { get; set; }
     public DbSet<Password> Passwords { get; set; }
+    public DbSet<ResetPasswordRequest> ResetPasswordRequests { get; set; }
 
     public ShopDbContext(DbContextOptions options) : base(options)
     { }
@@ -60,6 +61,17 @@ public class ShopDbContext : DbContext
             entity.HasOne(c => c.Password)
                 .WithOne(p => p.Customer)
                 .HasForeignKey<Password>(p => p.CustomerId)
+                .IsRequired();
+        });
+
+        modelBuilder.Entity<ResetPasswordRequest>(entity =>
+        {
+            entity.Property(e => e.OtpCode)
+                .IsFixedLength();
+
+            entity.HasOne(rpr => rpr.Customer)
+                .WithMany()
+                .HasForeignKey(rpr => rpr.CustomerId)
                 .IsRequired();
         });
 

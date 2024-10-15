@@ -17,9 +17,9 @@ public interface IRepository<T> where T : BaseEntity
 
     Task<T?> GetOneByIdAsync(int id);
 
-    Task InsertAsync(T entity, bool deferInsert = true);
+    Task InsertAsync(T entity, bool deferInsert = false);
 
-    Task UpdateAsync(T entity, bool deferUpdate = true);
+    Task UpdateAsync(T entity, bool deferUpdate = false);
 
-    Task DeleteAsync(T entity, bool deferDelete = true);
+    Task DeleteAsync(T entity, bool deferDelete = false);
 }

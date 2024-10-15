@@ -27,7 +27,7 @@ public class CustomerService : ICustomerService
         this.passwordService = passwordService;
     }
 
-    protected async Task<Customer?> GetCustomerByEmailAsync(string email, bool skipInactive = true)
+    public async Task<Customer?> GetCustomerByEmailAsync(string email, bool skipInactive = true)
     {
         var cacheKey = cacheService.PrepareCacheKey(CustomerCacheKeys.GetCustomerByEmailKey,
             email, skipInactive);
@@ -97,47 +97,5 @@ public class CustomerService : ICustomerService
         {
             cacheService.RemoveByPrefix(CustomerCacheKeys.PREFIX);
         }
-    }
-
-    public async Task<Customer> RegisterCustomerAsync(Customer customer, Password password)
-    {
-        ArgumentNullException.ThrowIfNull(customer);
-        ArgumentNullException.ThrowIfNull(password);
-
-        await transactionManager.RunTransactionAsync(async () =>
-        {
-            await InsertCustomerAsync(customer, true, true);
-
-            password.Customer = customer;
-            await passwordService.InsertPasswordAsync(password, true, true);
-        });
-
-        cacheService.RemoveByPrefix(CustomerCacheKeys.PREFIX);
-        return customer;
-    }
-
-    public async Task<Customer?> LoginCustomerAsync(string email, string password)
-    {
-        ArgumentException.ThrowIfNullOrWhiteSpace(email);
-        ArgumentException.ThrowIfNullOrWhiteSpace(password);
-
-        var customer = await GetCustomerByEmailAsync(email);
-        if (customer is null)
-        {
-            return null;
-        }
-
-        var passwordEntity = await passwordService.GetPasswordByCustomerIdAsync(customer.Id);
-        if (passwordEntity is null)
-        {
-            return null;
-        }
-
-        if (!passwordService.VerifyPassword(password, passwordEntity.PasswordHash))
-        {
-            return null;
-        }
-
-        return customer;
     }
 }

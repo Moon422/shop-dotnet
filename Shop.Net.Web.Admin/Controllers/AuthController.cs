@@ -16,14 +16,17 @@ public class AuthController : Controller
 {
     protected readonly ICustomerService customerService;
     protected readonly IPasswordService passwordService;
+    protected readonly Services.Customers.IAuthenticationService authenticationService;
     protected readonly IAuthModelFactory authModelFactory;
 
     public AuthController(ICustomerService customerService,
         IPasswordService passwordService,
+        Services.Customers.IAuthenticationService authenticationService,
         IAuthModelFactory authModelFactory)
     {
         this.customerService = customerService;
         this.passwordService = passwordService;
+        this.authenticationService = authenticationService;
         this.authModelFactory = authModelFactory;
     }
 
@@ -65,10 +68,10 @@ public class AuthController : Controller
             return View(model);
         }
 
-        var customer = await customerService.LoginCustomerAsync(model.Email, model.Password);
+        var customer = await authenticationService.LoginCustomerAsync(model.Email, model.Password);
         if (customer is null)
         {
-            ModelState.AddModelError(ErrorKeys.GlobalViewErrorKey, "Invalid Credentials");
+            ModelState.AddModelError(ErrorKeys.GlobalViewErrorKey, "Invalid credentials. Please try again.");
             return View(model);
         }
 
@@ -116,7 +119,7 @@ public class AuthController : Controller
             PasswordHash = passwordService.HashPassword(model.Password)
         };
 
-        customer = await customerService.RegisterCustomerAsync(customer, password);
+        customer = await authenticationService.RegisterCustomerAsync(customer, password);
         await SignInAsync(customer, false);
 
         if (string.IsNullOrWhiteSpace(returnUrl))
@@ -125,5 +128,92 @@ public class AuthController : Controller
         }
 
         return Redirect(returnUrl);
+    }
+
+    public IActionResult ResetPassword()
+    {
+        var model = new ResetPasswordRequestModel();
+        return View(model);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> ResetPasswordRequest(ResetPasswordRequestModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+
+        if (!await authenticationService.GeneratePasswordResetTokenAsync(model.Email))
+        {
+            ModelState.AddModelError("", "No account found.");
+            return View(model);
+        }
+
+        ViewData.Add("success_message", "Email has been sent for reseting your password.");
+        return View(model);
+    }
+
+    public async Task<IActionResult> ResetPasswordNew(string otp)
+    {
+        var resetPasswordRequest = await authenticationService.VerifyResetTokenAsync(otp);
+        if (resetPasswordRequest is null)
+        {
+            var model = new PasswordModel();
+            ModelState.AddModelError(ErrorKeys.GlobalViewErrorKey, "Invalid reset token. Please try again.");
+            return View(model);
+        }
+
+        var passwordModel = new PasswordModel
+        {
+            CustomerId = resetPasswordRequest.CustomerId
+        };
+
+        return View(passwordModel);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> ResetPasswordNewRequest(string otp, PasswordModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+
+        var resetPasswordRequest = await authenticationService.VerifyResetTokenAsync(otp, true);
+        if (resetPasswordRequest is null || !resetPasswordRequest.IsActive || resetPasswordRequest.CustomerId != model.CustomerId)
+        {
+            ModelState.AddModelError(ErrorKeys.GlobalViewErrorKey, "Invalid reset token. Please try again.");
+            return View(model);
+        }
+
+        await authenticationService.InvalidateResetTokenAsync(resetPasswordRequest);
+
+        var customer = await customerService.GetCustomerByIdAsync(model.CustomerId);
+        if (customer is null)
+        {
+            ModelState.AddModelError(ErrorKeys.GlobalViewErrorKey, "Invalid reset token. Please try again.");
+            return RedirectToAction("ResetPassword");
+        }
+
+        var password = await passwordService.GetPasswordByCustomerIdAsync(customer.Id);
+        if (password is null)
+        {
+            password = new Password()
+            {
+                PasswordHash = passwordService.HashPassword(model.Password),
+                CustomerId = customer.Id
+            };
+
+            await passwordService.InsertPasswordAsync(password);
+        }
+        else
+        {
+            await passwordService.UpdatePasswordAsync(password);
+        }
+
+        await SignInAsync(customer, false);
+
+        return RedirectToAction("Index", "Home");
     }
 }

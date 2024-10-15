@@ -52,6 +52,7 @@ public static class DependencyRegistrar
         services.AddScoped<ICacheService, CacheService>();
         services.AddScoped<ICustomerService, CustomerService>();
         services.AddScoped<IPasswordService, PasswordService>();
+        services.AddScoped<IAuthenticationService, AuthenticationService>();
 
         services.AddScoped<IAuthModelFactory, AuthModelFactory>();
     }

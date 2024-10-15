@@ -137,6 +137,7 @@ public class AuthController : Controller
     }
 
     [HttpPost]
+    [ActionName("ResetPassword")]
     public async Task<IActionResult> ResetPasswordRequest(ResetPasswordRequestModel model)
     {
         if (!ModelState.IsValid)
@@ -146,7 +147,7 @@ public class AuthController : Controller
 
         if (!await authenticationService.GeneratePasswordResetTokenAsync(model.Email))
         {
-            ModelState.AddModelError("", "No account found.");
+            ModelState.AddModelError(ErrorKeys.GlobalViewErrorKey, "No account found.");
             return View(model);
         }
 
@@ -173,6 +174,7 @@ public class AuthController : Controller
     }
 
     [HttpPost]
+    [ActionName("ResetPasswordNew")]
     public async Task<IActionResult> ResetPasswordNewRequest(string otp, PasswordModel model)
     {
         if (!ModelState.IsValid)
@@ -209,6 +211,7 @@ public class AuthController : Controller
         }
         else
         {
+            password.PasswordHash = passwordService.HashPassword(model.Password);
             await passwordService.UpdatePasswordAsync(password);
         }
 

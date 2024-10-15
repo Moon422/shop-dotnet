@@ -8,7 +8,7 @@
 
 @if (showGlobalError)
 {
-    <div class="toast toast-center ">
+    <div class="toast toast-center">
     <div class="alert alert-error">
         <span>@errorMessage?.Errors.First().ErrorMessage</span>
     </div>
@@ -43,7 +43,6 @@
                             <input asp-for="Email" class="grow" />
                         </label>
                     </div>
-
                     <div class="form-control">
                         <label asp-for="Password" class="input input-bordered flex items-center gap-2">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
@@ -62,7 +61,7 @@
                         </label>
                     </div>
                     <div class="flex justify-between">
-                        <a href="#"
+                        <a asp-action="ResetPassword" asp-controller="Auth"
                             class="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">Forgot
                             Password?</a>
 

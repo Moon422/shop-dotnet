@@ -9,14 +9,16 @@
     <link rel="stylesheet" href="~/Shop.Net.Web.Admin.styles.css" asp-append-version="true" />
 </head>
 
-<body class="h-screen max-h-screen flex">
-    @(await Html.PartialAsync("_Sidebar"))
-    <div class="flex-1 bg-green-500">
-        <main role="main">
-            @RenderBody()
-        </main>
+<body class="h-screen max-h-screen flex flex-col">
+    @(await Component.InvokeAsync<NavbarViewComponent>())
+    <div class="flex flex-grow">
+        @(await Html.PartialAsync("_Sidebar"))
+        <div class="flex-1 bg-green-500">
+            <main role="main">
+                @RenderBody()
+            </main>
+        </div>
     </div>
-
     <script src="~/lib/jquery/jquery.min.js" asp-append-version="true"></script>
     <script src="~/js/app.bundle.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)

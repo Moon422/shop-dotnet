@@ -7,9 +7,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Shop.Net.Core.Configurations;
 using Shop.Net.Data;
 using Shop.Net.Services.Caching;
+using Shop.Net.Services.Common;
 using Shop.Net.Services.Customers;
 using Shop.Net.Web.Admin.Configurations;
 using Shop.Net.Web.Admin.Factories;
+using Shop.Net.Web.Admin.Services;
 
 namespace Shop.Net.Web.Admin;
 
@@ -43,6 +45,7 @@ public static class DependencyRegistrar
                 options.SlidingExpiration = true;
             });
 
+        services.AddAutoMapper(option => option.AddProfile<AutoMapperProfile>());
 
         services.AddSingleton<IApplicationSettings, ApplicationSettings>();
 
@@ -53,6 +56,7 @@ public static class DependencyRegistrar
         services.AddScoped<ICustomerService, CustomerService>();
         services.AddScoped<IPasswordService, PasswordService>();
         services.AddScoped<IAuthenticationService, AuthenticationService>();
+        services.AddScoped<IWorkContext, WorkContext>();
 
         services.AddScoped<IAuthModelFactory, AuthModelFactory>();
     }

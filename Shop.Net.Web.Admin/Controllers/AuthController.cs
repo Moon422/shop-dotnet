@@ -16,12 +16,12 @@ public class AuthController : Controller
 {
     protected readonly ICustomerService customerService;
     protected readonly IPasswordService passwordService;
-    protected readonly Services.Customers.IAuthenticationService authenticationService;
+    protected readonly Net.Services.Customers.IAuthenticationService authenticationService;
     protected readonly IAuthModelFactory authModelFactory;
 
     public AuthController(ICustomerService customerService,
         IPasswordService passwordService,
-        Services.Customers.IAuthenticationService authenticationService,
+        Net.Services.Customers.IAuthenticationService authenticationService,
         IAuthModelFactory authModelFactory)
     {
         this.customerService = customerService;

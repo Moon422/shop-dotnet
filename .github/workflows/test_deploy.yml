@@ -20,23 +20,24 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --configuration Release --no-restore
+      run: dotnet build -c Release --no-restore
     # - name: Test
     #   run: dotnet test --no-build --verbosity normal
     - name: Publish
       run: dotnet publish -c Release -r linux-x64 --self-contained -o ~/app 
-    - name: test 
-      run: |
-        ls -la 
-        pwd
-        ls -la ~ 
-        ls -la ~/app 
+    # - name: test 
+    #   run: |
+    #     ls -la 
+    #     pwd
+    #     ls -la ~ 
+    #     ls -la ~/app 
 
-    # - name: copy file
-    #   uses: appleboy/scp-action@v0.1.7
-    #   with:
-    #     host: ${{ secrets.HOST }}
-    #     username: ${{ secrets.USERNAME }}
-    #     password: ${{ secrets.PASSWORD }}
-    #     port: ${{ secrets.PORT }}
-
+    - name: copy file
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        port: ${{ secrets.PORT }}
+        source: "~/app" 
+        target: "~/"

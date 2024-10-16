@@ -20,15 +20,17 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet --configuration Release --no-restore
     # - name: Test
     #   run: dotnet test --no-build --verbosity normal
-
+    - name: Publish
+      run: dotnet publish -c Release -r linux-x64 --self-contained -o ~/app 
     - name: test 
       run: |
         ls -la 
         pwd
         ls -la ~ 
+        ls -la ~/app 
 
     # - name: copy file
     #   uses: appleboy/scp-action@v0.1.7

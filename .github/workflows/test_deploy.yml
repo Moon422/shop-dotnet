@@ -25,7 +25,10 @@ jobs:
     #   run: dotnet test --no-build --verbosity normal
 
     - name: test 
-      run: ls -la 
+      run: |
+        ls -la 
+        pwd
+        ls -la ~ 
 
     # - name: copy file
     #   uses: appleboy/scp-action@v0.1.7

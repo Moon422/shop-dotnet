@@ -12,7 +12,8 @@
 <body class="h-screen max-h-screen flex flex-col">
     @(await Component.InvokeAsync<NavbarViewComponent>())
     <div class="flex flex-1">
-        @(await Html.PartialAsync("_Sidebar"))
+        @* @(await Html.PartialAsync("_Sidebar")) *@
+        @(await Component.InvokeAsync<SidebarViewComponent>())
         <div class="flex-1 bg-green-500">
             <main role="main">
                 @RenderBody()

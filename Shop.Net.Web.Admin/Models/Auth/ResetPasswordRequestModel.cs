@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Shop.Net.Web.Admin.Models;
+namespace Shop.Net.Web.Admin.Models.Auth;
 
 public record ResetPasswordRequestModel
 {

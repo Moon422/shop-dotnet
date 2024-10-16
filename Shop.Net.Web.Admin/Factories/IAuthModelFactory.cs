@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using Shop.Net.Web.Admin.Models;
+using Shop.Net.Web.Admin.Models.Auth;
 
 namespace Shop.Net.Web.Admin.Factories;
 

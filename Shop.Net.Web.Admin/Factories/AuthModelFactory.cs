@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Shop.Net.Core.Domains.Customers;
-using Shop.Net.Web.Admin.Models;
+using Shop.Net.Web.Admin.Models.Auth;
 
 namespace Shop.Net.Web.Admin.Factories;
 

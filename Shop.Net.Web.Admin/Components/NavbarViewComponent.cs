@@ -2,7 +2,8 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Shop.Net.Services.Common;
-using Shop.Net.Web.Admin.Models;
+using Shop.Net.Web.Admin.Models.Common;
+using Shop.Net.Web.Admin.Models.Customers;
 
 namespace Shop.Net.Web.Admin.Components;
 

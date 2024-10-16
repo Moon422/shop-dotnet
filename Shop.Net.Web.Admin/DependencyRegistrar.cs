@@ -1,6 +1,7 @@
 using System;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,6 +20,9 @@ public static class DependencyRegistrar
 {
     public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddHttpContextAccessor();
+        services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+
         services.AddDbContext<ShopDbContext>(options =>
         {
             var connectionString = configuration.GetConnectionString("mysql");
@@ -30,8 +34,6 @@ public static class DependencyRegistrar
             var serverVersion = new MySqlServerVersion(new Version(8, 0, 36));
             options.UseMySql(connectionString, serverVersion);
         });
-
-        services.AddHttpContextAccessor();
 
         var authenticationConfigurations = configuration.GetSection("Authentication");
 
@@ -59,6 +61,7 @@ public static class DependencyRegistrar
         services.AddScoped<IWorkContext, WorkContext>();
 
         services.AddScoped<IAuthModelFactory, AuthModelFactory>();
+        services.AddScoped<ICommonModelFactory, CommonModelFactory>();
     }
 
     public static void ConfigureApplication(this IApplicationBuilder app)

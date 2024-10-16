@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Shop.Net.Core.Domains.Customers;
 using Shop.Net.Services.Customers;
 using Shop.Net.Web.Admin.Factories;
-using Shop.Net.Web.Admin.Models;
+using Shop.Net.Web.Admin.Models.Auth;
 
 namespace Shop.Net.Web.Admin.Configurations;
 

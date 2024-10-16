@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Shop.Net.Web.Admin.Models;
+namespace Shop.Net.Web.Admin.Models.Customers;
 
 public record CustomerDetailsModel : BaseModel
 {

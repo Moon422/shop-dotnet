@@ -1,4 +1,4 @@
-namespace Shop.Net.Web.Admin.Models;
+namespace Shop.Net.Web.Admin.Models.Customers;
 
 public record RoleModel : BaseEntityModel
 {

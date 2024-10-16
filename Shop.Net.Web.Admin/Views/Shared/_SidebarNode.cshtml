@@ -1,0 +1,32 @@
+@model SidebarNodeModel
+
+@{
+    var activeSystemName = ViewData["sidebar-active-system-name"] as string;
+}
+
+@if (Model.ChildrenNodes.Any())
+{
+    <li>
+    <details>
+        <summary>@Model.Text</summary>
+        <ul>
+            @if (!string.IsNullOrWhiteSpace(Model.Url))
+                {
+                    <li>
+                        <a class="@(Model.SystemName == activeSystemName ? "active" : "")" href="Model.Url">@Model.Text</a>
+                    </li>
+                }
+                @foreach (var childNodeModel in Model.ChildrenNodes)
+                {
+                    @await Html.PartialAsync("_SidebarNode", childNodeModel)
+                }
+            </ul>
+        </details>
+    </li>
+}
+else
+{
+    <li>
+    <a class="@(Model.SystemName == activeSystemName ? "active" : "")" href="@Model.Url">@Model.Text</a>
+</li>
+}

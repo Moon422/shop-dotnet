@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Shop.Net.Core.Domains.Customers;
 
-namespace Shop.Net.Web.Admin.Models;
+namespace Shop.Net.Web.Admin.Models.Auth;
 
 public class RegisterModel
 {

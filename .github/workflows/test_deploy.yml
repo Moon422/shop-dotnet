@@ -39,7 +39,7 @@ jobs:
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
         port: 22
-        source: "~/app" 
+        source: "~/app/*" 
         target: "~/"
     # -name: Move build files to output
     #   run: | 

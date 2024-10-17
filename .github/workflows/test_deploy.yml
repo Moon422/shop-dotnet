@@ -40,7 +40,4 @@ jobs:
     
     # -name: Move build files to output
     #   run: | 
-    #     sshpass -p '${{ secrets.PASSWORD }}' ssh -o StrictHostKeyChecking=no '${{ secrets.USERNAME }}'@'${{ secrets.HOST }}' 'sudo systemctl stop kestrel_app.service \
-    #     sudo rsync -av --delete /home/ci_user/app/ /var/www/app \
-    #     sudo systemctl start kestrel_app.service \
-    #     sudo systemctl reload nginx'
+    #     sshpass -p '${{ secrets.PASSWORD }}' ssh -o StrictHostKeyChecking=no '${{ secrets.USERNAME }}'@'${{ secrets.HOST }}' 'sudo systemctl stop kestrel_app.service; sudo rsync -av --delete /home/ci_user/app/ /var/www/app; sudo systemctl start kestrel_app.service; sudo systemctl reload nginx'

@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using Shop.Net.Core.Settings.Attributes;
 
 namespace Shop.Net.Core.Settings;

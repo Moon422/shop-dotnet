@@ -29,7 +29,7 @@ jobs:
       run: |
         pwd 
         zip -r app.zip ~/app  
-        ls ~/
+        ls /home/runner/work/shop-dotnet/shop-dotnet
     - name: Copy build files to server
       uses: appleboy/scp-action@v0.1.7
       with:

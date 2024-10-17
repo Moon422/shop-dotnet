@@ -1,4 +1,8 @@
 using System;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Text.Json;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -6,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Shop.Net.Core.Configurations;
+using Shop.Net.Core.Settings.Attributes;
 using Shop.Net.Data;
 using Shop.Net.Services.Caching;
 using Shop.Net.Services.Common;
@@ -18,6 +23,24 @@ namespace Shop.Net.Web.Admin;
 
 public static class DependencyRegistrar
 {
+    private static async void ConfigureSettings(IServiceCollection services, IConfiguration configuration)
+    {
+        Assembly assembly = Assembly.GetExecutingAssembly();
+        var settingsTypes = assembly.GetTypes()
+            .Where(t => t.IsClass && t.GetCustomAttribute<SettingsAttribute>() is not null)
+            .ToList();
+
+        foreach (var settingsType in settingsTypes)
+        {
+            var filePath = settingsType.GetCustomAttribute<SettingsAttribute>()?.FullPath ?? "";
+            if (string.IsNullOrWhiteSpace(filePath))
+                continue;
+
+            var settingsContent = await File.ReadAllTextAsync(filePath);
+            // var settings = JsonSerializer.Deserialize<
+        }
+    }
+
     public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddHttpContextAccessor();

@@ -13,26 +13,29 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: test
-      run: |
-        echo '${{ secrets.PASSWORD }}'
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
-    # - name: Restore dependencies
-    #   run: dotnet restore
-    # - name: Build
-    #   run: dotnet build -c Release --no-restore
-    # # - name: Test
-    # #   run: dotnet test --no-build --verbosity normal
-    # - name: Publish
-    #   run: dotnet publish -c Release -r linux-x64 --self-contained -o ~/app 
+    
+    - name: Restore dependencies
+      run: dotnet restore
+    
+    - name: Build
+      run: dotnet build -c Release --no-restore
+    
+    # - name: Test
+    #   run: dotnet test --no-build --verbosity normal
+    
+    - name: Publish
+      run: dotnet publish -c Release -r linux-x64 --self-contained -o ~/app 
+    
     - name: Compress the app folder (using tar)
       run: |
-        # zip -r ~/app.zip ~/app  
-        touch abc.text
-        sshpass -p '${{ secrets.PASSWORD }}' scp -o StrictHostKeyChecking=no abc.text '${{ secrets.USERNAME }}'@'${{ secrets.HOST }}':~/ 
+        zip -r ~/app.zip ~/app  
+        sshpass -p '${{ secrets.PASSWORD }}' scp -o StrictHostKeyChecking=no ~/app.zip '${{ secrets.USERNAME }}'@'${{ secrets.HOST }}':~/ 
+    
     # - name: Copy build files to server
     #   uses: appleboy/scp-action@v0.1.7
     #   with:

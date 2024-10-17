@@ -28,16 +28,16 @@ jobs:
     - name: Compress the app folder (using tar)
       run: |
         zip -r ~/app.zip ~/app  
-        ls ~
-    - name: Copy build files to server
-      uses: appleboy/scp-action@v0.1.7
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.PASSWORD }}
-        port: 22
-        source: "~/app.zip" 
-        target: "~/"
+        sshpass --help 
+    # - name: Copy build files to server
+    #   uses: appleboy/scp-action@v0.1.7
+    #   with:
+    #     host: ${{ secrets.HOST }}
+    #     username: ${{ secrets.USERNAME }}
+    #     password: ${{ secrets.PASSWORD }}
+    #     port: 22
+    #     source: "~/app.zip" 
+    #     target: "~/"
     # -name: Move build files to output
     #   run: | 
     #     sudo systemctl stop kestrel_app.service 

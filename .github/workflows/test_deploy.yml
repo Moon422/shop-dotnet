@@ -33,21 +33,13 @@ jobs:
     
     - name: Compress the app folder (using tar)
       run: |
-        zip -r ~/app.zip ~/app  
-        sshpass -p '${{ secrets.PASSWORD }}' scp -o StrictHostKeyChecking=no ~/app.zip '${{ secrets.USERNAME }}'@'${{ secrets.HOST }}':~/ 
+        # zip -r ~/app.zip ~/app  
+        tar -czvf ~/app.tar.gz ~/app 
+        sshpass -p '${{ secrets.PASSWORD }}' scp -o StrictHostKeyChecking=no ~/app.tar.gz '${{ secrets.USERNAME }}'@'${{ secrets.HOST }}':~/ 
     
-    # - name: Copy build files to server
-    #   uses: appleboy/scp-action@v0.1.7
-    #   with:
-    #     host: ${{ secrets.HOST }}
-    #     username: ${{ secrets.USERNAME }}
-    #     password: ${{ secrets.PASSWORD }}
-    #     port: 22
-    #     source: "~/app.zip" 
-    #     target: "~/"
     # -name: Move build files to output
     #   run: | 
-    #     sudo systemctl stop kestrel_app.service 
-    #     sudo rsync -av --delete /home/ci_user/app/ /var/www/app 
-    #     sudo systemctl start kestrel_app.service 
-    #     sudo systemctl reload nginx
+    #     sshpass -p '${{ secrets.PASSWORD }}' ssh -o StrictHostKeyChecking=no '${{ secrets.USERNAME }}'@'${{ secrets.HOST }}' 'sudo systemctl stop kestrel_app.service \
+    #     sudo rsync -av --delete /home/ci_user/app/ /var/www/app \
+    #     sudo systemctl start kestrel_app.service \
+    #     sudo systemctl reload nginx'

@@ -33,8 +33,10 @@ jobs:
     
     - name: Compress the app folder (using tar)
       run: |
+        pwd
+        ls 
         tar -czvf shop_dotnet_linux_x64.tar.gz shop_dotnet_linux_x64 
-        sshpass -p '${{ secrets.PASSWORD }}' scp -o StrictHostKeyChecking=no ~/app.tar.gz '${{ secrets.USERNAME }}'@'${{ secrets.HOST }}':~/ 
+        sshpass -p '${{ secrets.PASSWORD }}' scp -o StrictHostKeyChecking=no shop_dotnet_linux_x64.tar.gz '${{ secrets.USERNAME }}'@'${{ secrets.HOST }}':~/ 
     
     # -name: Move build files to output
     #   run: | 

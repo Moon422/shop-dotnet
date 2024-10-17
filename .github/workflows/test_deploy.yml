@@ -28,7 +28,7 @@ jobs:
     - name: Compress the app folder (using tar)
       run: |
         pwd 
-        zip -r app.zip ~/app  
+        zip -r ~/app.zip ~/app  
         ls /home/runner/work/shop-dotnet/shop-dotnet
     - name: Copy build files to server
       uses: appleboy/scp-action@v0.1.7

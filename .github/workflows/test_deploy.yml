@@ -27,9 +27,8 @@ jobs:
       run: dotnet publish -c Release -r linux-x64 --self-contained -o ~/app 
     - name: Compress the app folder (using tar)
       run: |
-        pwd 
         zip -r ~/app.zip ~/app  
-        ls /home/runner/work/shop-dotnet/shop-dotnet
+        ls ~
     - name: Copy build files to server
       uses: appleboy/scp-action@v0.1.7
       with:
@@ -37,7 +36,7 @@ jobs:
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
         port: 22
-        source: "~/app.tar.gz" 
+        source: "~/app.zip" 
         target: "~/"
     # -name: Move build files to output
     #   run: | 

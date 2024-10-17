@@ -32,7 +32,7 @@ jobs:
       run: |
         # zip -r ~/app.zip ~/app  
         touch abc.text
-        sshpass -p '${{ secrets.PASSWORD }}' scp abc.text '${{ secrets.USERNAME }}'@'${{ secrets.HOST }}':~/ 
+        sshpass -p '${{ secrets.PASSWORD }}' scp -o StrictHostKeyChecking=no abc.text '${{ secrets.USERNAME }}'@'${{ secrets.HOST }}':~/ 
     # - name: Copy build files to server
     #   uses: appleboy/scp-action@v0.1.7
     #   with:

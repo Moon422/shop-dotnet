@@ -25,13 +25,8 @@ jobs:
     #   run: dotnet test --no-build --verbosity normal
     - name: Publish
       run: dotnet publish -c Release -r linux-x64 --self-contained -o ~/app 
-    # - name: test 
-    #   run: |
-    #     ls -la 
-    #     pwd
-    #     ls -la ~ 
-    #     ls -la ~/app 
-
+    - name: Compress the publish folder (using tar)
+      run: tar -czvf publish.tar.gz -C ./app .
     - name: Copy build files to server
       uses: appleboy/scp-action@v0.1.7
       with:
@@ -39,7 +34,7 @@ jobs:
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
         port: 22
-        source: "~/app/*" 
+        source: "~/app.tar.gz" 
         target: "~/"
     # -name: Move build files to output
     #   run: | 

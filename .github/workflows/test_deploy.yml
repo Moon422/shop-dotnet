@@ -26,7 +26,9 @@ jobs:
     - name: Publish
       run: dotnet publish -c Release -r linux-x64 --self-contained -o ~/app 
     - name: Compress the app folder (using tar)
-      run: tar -czvf app.tar.gz -C ~/app .
+      run: |
+        tar -czvf app.tar.gz -C ~/app . 
+        ls ~/
     - name: Copy build files to server
       uses: appleboy/scp-action@v0.1.7
       with:

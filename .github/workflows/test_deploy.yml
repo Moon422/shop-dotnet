@@ -28,10 +28,10 @@ jobs:
     # #   run: dotnet test --no-build --verbosity normal
     # - name: Publish
     #   run: dotnet publish -c Release -r linux-x64 --self-contained -o ~/app 
-    # - name: Compress the app folder (using tar)
-    #   run: |
-    #     zip -r ~/app.zip ~/app  
-    #     sshpass -p '${{ secrets.PASSWORD }}' scp ~/app.zip ${{ secrets.USERNAME }}@${{ secrets.HOST }}:~/ 
+    - name: Compress the app folder (using tar)
+      run: |
+        zip -r ~/app.zip ~/app  
+        sshpass -p '${{ secrets.PASSWORD }}' scp ~/app.zip '${{ secrets.USERNAME }}'@'${{ secrets.HOST }}':~/ 
     # - name: Copy build files to server
     #   uses: appleboy/scp-action@v0.1.7
     #   with:

@@ -32,12 +32,18 @@ jobs:
     #     ls -la ~ 
     #     ls -la ~/app 
 
-    - name: copy file
+    - name: Copy build files to server
       uses: appleboy/scp-action@v0.1.7
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
-        port: ${{ secrets.PORT }}
+        port: 22
         source: "~/app" 
         target: "~/"
+    # -name: Move build files to output
+    #   run: | 
+    #     sudo systemctl stop kestrel_app.service 
+    #     sudo rsync -av --delete /home/ci_user/app/ /var/www/app 
+    #     sudo systemctl start kestrel_app.service 
+    #     sudo systemctl reload nginx

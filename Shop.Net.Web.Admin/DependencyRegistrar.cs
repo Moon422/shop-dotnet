@@ -49,7 +49,7 @@ public static class DependencyRegistrar
 
         services.AddAutoMapper(option => option.AddProfile<AutoMapperProfile>());
 
-        services.AddSingleton<IApplicationSettings, ApplicationSettings>();
+        services.AddSingleton<IApplicationConfig, ApplicationConfig>();
 
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         services.AddScoped<ITransactionManager, TransactionManager>();

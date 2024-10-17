@@ -1,6 +1,6 @@
 namespace Shop.Net.Core.Configurations;
 
-public interface IApplicationSettings
+public interface IApplicationConfig
 {
     string? GetConnectionString();
     string? GetAuthenticationSecret();

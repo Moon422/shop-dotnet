@@ -25,7 +25,35 @@ public class CacheService : ICacheService
         return new CacheKey(key, cacheKey.Prefix);
     }
 
-    public async Task<T?> GetAsync<T>(CacheKey cacheKey, Func<Task<T>> dbCall)
+    public async Task<IList<T>> GetAllAsync<T>(CacheKey cacheKey, Func<Task<IList<T>>> dbCall)
+    {
+        if (memoryCache.TryGetValue(cacheKey.Key, out IList<T>? value))
+        {
+            return value ?? [];
+        }
+
+        value = await dbCall();
+
+        if (!cachePrefixCancellationTokens.TryGetValue(cacheKey.Prefix, out var cts))
+        {
+            cts = new CancellationTokenSource();
+            cachePrefixCancellationTokens.Add(cacheKey.Prefix, cts);
+        }
+        else if (cts is null)
+        {
+            cts = new CancellationTokenSource();
+            cachePrefixCancellationTokens[cacheKey.Prefix] = cts;
+        }
+
+        var cacheEntryOption = new MemoryCacheEntryOptions()
+            .SetSlidingExpiration(TimeSpan.FromMinutes(10))
+            .SetAbsoluteExpiration(TimeSpan.FromHours(6))
+            .AddExpirationToken(new CancellationChangeToken(cts.Token));
+
+        return memoryCache.Set(cacheKey.Key, value, cacheEntryOption);
+    }
+
+    public async Task<T?> GetAsync<T>(CacheKey cacheKey, Func<Task<T?>> dbCall)
     {
         if (memoryCache.TryGetValue(cacheKey.Key, out T? value))
         {

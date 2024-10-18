@@ -107,6 +107,8 @@ public static class DependencyRegistrar
         services.AddScoped<IPasswordService, PasswordService>();
         services.AddScoped<IAuthenticationService, AuthenticationService>();
         services.AddScoped<IWorkContext, WorkContext>();
+        services.AddScoped<IRoleService, RoleService>();
+        services.AddScoped<IPermissionService, PermissionService>();
 
         services.AddScoped<IAuthModelFactory, AuthModelFactory>();
         services.AddScoped<ICommonModelFactory, CommonModelFactory>();

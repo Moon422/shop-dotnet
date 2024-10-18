@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Shop.Net.Core.Caching;
 
@@ -8,7 +9,9 @@ public interface ICacheService
 {
     CacheKey PrepareCacheKey(CacheKey cacheKey, params object[] tokens);
 
-    Task<T?> GetAsync<T>(CacheKey cacheKey, Func<Task<T>> dbCall);
+    Task<IList<T>> GetAllAsync<T>(CacheKey cacheKey, Func<Task<IList<T>>> dbCall);
+
+    Task<T?> GetAsync<T>(CacheKey cacheKey, Func<Task<T?>> dbCall);
 
     void Remove(CacheKey cacheKey);
 

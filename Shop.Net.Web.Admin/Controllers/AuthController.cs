@@ -18,12 +18,14 @@ public class AuthController : Controller
     protected readonly ICustomerService customerService;
     protected readonly IPasswordService passwordService;
     protected readonly Net.Services.Customers.IAuthenticationService authenticationService;
+    protected readonly IRoleService roleService;
     protected readonly IAuthModelFactory authModelFactory;
     protected readonly CustomerSettings customerSettings;
 
     public AuthController(ICustomerService customerService,
         IPasswordService passwordService,
         Net.Services.Customers.IAuthenticationService authenticationService,
+        IRoleService roleService,
         IAuthModelFactory authModelFactory,
         CustomerSettings customerSettings)
     {
@@ -32,6 +34,7 @@ public class AuthController : Controller
         this.authenticationService = authenticationService;
         this.authModelFactory = authModelFactory;
         this.customerSettings = customerSettings;
+        this.roleService = roleService;
     }
 
     #region Utilities
@@ -40,13 +43,20 @@ public class AuthController : Controller
     {
         ArgumentNullException.ThrowIfNull(customer);
 
-        var claims = new List<Claim>
+        IList<Role> customerRoles = await roleService.GetCustomerRolesAsync(customer.Id);
+
+        List<Claim> claims = new List<Claim>
         {
             new Claim(ClaimTypes.Email, customer.Email)
         };
 
-        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-        var authProperties = new AuthenticationProperties
+        foreach (var customerRole in customerRoles)
+        {
+            claims.Add(new Claim(ClaimTypes.Role, customerRole.Name));
+        }
+
+        ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+        AuthenticationProperties authProperties = new AuthenticationProperties
         {
             IsPersistent = isPersistent
         };

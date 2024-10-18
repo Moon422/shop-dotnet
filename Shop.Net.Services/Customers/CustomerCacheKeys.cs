@@ -14,4 +14,7 @@ public static class CustomerCacheKeys
 
     public static CacheKey GetCustomerByEmailKey => new CacheKey(
         "Shop.Net.Customers.GetCustomerByEmail.{0}.{1}", PREFIX);
+
+    public static CacheKey GetCustomerRolesCacheKey => new CacheKey(
+        "Shop.Net.Customers.GetCustomerRoles.{0}", PREFIX);
 }

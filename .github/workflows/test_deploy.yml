@@ -32,12 +32,10 @@ jobs:
       run: dotnet publish -c Release -r linux-x64 --self-contained -o shop_dotnet_linux_x64 
     
     - name: Compress the app folder (using tar)
-      run: |
-        pwd
-        ls 
+      run: | 
         tar -czvf shop_dotnet_linux_x64.tar.gz shop_dotnet_linux_x64 
         sshpass -p '${{ secrets.PASSWORD }}' scp -o StrictHostKeyChecking=no shop_dotnet_linux_x64.tar.gz '${{ secrets.USERNAME }}'@'${{ secrets.HOST }}':~/ 
     
-    # -name: Move build files to output
-    #   run: | 
-    #     sshpass -p '${{ secrets.PASSWORD }}' ssh -o StrictHostKeyChecking=no '${{ secrets.USERNAME }}'@'${{ secrets.HOST }}' 'sudo systemctl stop kestrel_app.service; sudo rsync -av --delete /home/ci_user/app/ /var/www/app; sudo systemctl start kestrel_app.service; sudo systemctl reload nginx'
+    -name: Move build files to output
+      run: | 
+        sshpass -p '${{ secrets.PASSWORD }}' ssh -o StrictHostKeyChecking=no '${{ secrets.USERNAME }}'@'${{ secrets.HOST }}' 'sudo systemctl stop kestral_shop_dotnet.service; sudo rsync -av --delete /home/ci_user/shop_dotnet_linux_x64/ /var/www/shop_dotnet_linux_x64; sudo systemctl start kestral_shop_dotnet.service; sudo systemctl reload nginx'

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Shop.Net.Core.Domains.Customers;
+using Shop.Net.Core.Settings;
 using Shop.Net.Services.Customers;
 using Shop.Net.Web.Admin.Factories;
 using Shop.Net.Web.Admin.Models.Auth;
@@ -18,16 +19,19 @@ public class AuthController : Controller
     protected readonly IPasswordService passwordService;
     protected readonly Net.Services.Customers.IAuthenticationService authenticationService;
     protected readonly IAuthModelFactory authModelFactory;
+    protected readonly CustomerSettings customerSettings;
 
     public AuthController(ICustomerService customerService,
         IPasswordService passwordService,
         Net.Services.Customers.IAuthenticationService authenticationService,
-        IAuthModelFactory authModelFactory)
+        IAuthModelFactory authModelFactory,
+        CustomerSettings customerSettings)
     {
         this.customerService = customerService;
         this.passwordService = passwordService;
         this.authenticationService = authenticationService;
         this.authModelFactory = authModelFactory;
+        this.customerSettings = customerSettings;
     }
 
     #region Utilities
@@ -87,6 +91,9 @@ public class AuthController : Controller
 
     public async Task<IActionResult> Register(string returnUrl)
     {
+        if (!customerSettings.PublicCustomerRegistrationEnabled)
+            return RedirectToAction("Index", "Home");
+
         var model = await authModelFactory.PrepareRegisterModelAsync(new RegisterModel());
         return View(model);
     }
@@ -95,6 +102,9 @@ public class AuthController : Controller
     [ActionName("Register")]
     public async Task<IActionResult> RegisterRequest(RegisterModel model, string returnUrl)
     {
+        if (!customerSettings.PublicCustomerRegistrationEnabled)
+            return RedirectToAction("Index", "Home");
+
         if (string.IsNullOrWhiteSpace(model.Password) || string.IsNullOrWhiteSpace(model.ConfirmPassword) || !string.Equals(model.Password, model.ConfirmPassword))
         {
             ModelState.AddModelError(nameof(RegisterModel.Password), "Invalid Password");

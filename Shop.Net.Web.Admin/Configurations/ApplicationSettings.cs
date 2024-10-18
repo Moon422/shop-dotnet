@@ -3,11 +3,11 @@ using Shop.Net.Core.Configurations;
 
 namespace Shop.Net.Web.Admin.Configurations;
 
-public class ApplicationSettings : IApplicationSettings
+public class ApplicationConfig : IApplicationConfig
 {
     protected readonly IConfiguration configuration;
 
-    public ApplicationSettings(IConfiguration configuration)
+    public ApplicationConfig(IConfiguration configuration)
     {
         this.configuration = configuration;
     }

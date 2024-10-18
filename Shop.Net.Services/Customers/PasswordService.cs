@@ -10,11 +10,11 @@ namespace Shop.Net.Services.Customers;
 
 public class PasswordService : IPasswordService
 {
-    protected readonly IApplicationSettings applicationSettings;
+    protected readonly IApplicationConfig applicationSettings;
     protected readonly IRepository<Password> passwordRepository;
     protected readonly ICacheService cacheService;
 
-    public PasswordService(IApplicationSettings applicationSettings,
+    public PasswordService(IApplicationConfig applicationSettings,
         IRepository<Password> passwordRepository,
         ICacheService cacheService)
     {

@@ -10,13 +10,7 @@
     <details>
         <summary>@Model.Text</summary>
         <ul>
-            @if (!string.IsNullOrWhiteSpace(Model.Url))
-                {
-                    <li>
-                        <a class="@(Model.SystemName == activeSystemName ? "active" : "")" href="Model.Url">@Model.Text</a>
-                    </li>
-                }
-                @foreach (var childNodeModel in Model.ChildrenNodes)
+            @foreach (var childNodeModel in Model.ChildrenNodes)
                 {
                     @await Html.PartialAsync("_SidebarNode", childNodeModel)
                 }

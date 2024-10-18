@@ -1,0 +1,34 @@
+[
+    {
+        "SystemName": "dashboard",
+        "Text": "Dashboard",
+        "Url": "/Home/Index"
+    },
+    {
+        "SystemName": "customers",
+        "Text": "Customers",
+        "ChildrenNodes": [
+            {
+                "SystemName": "customers:list",
+                "Text": "Customers",
+                "Url": "/Customers/List"
+            },
+            {
+                "SystemName": "customers:customerroles",
+                "Text": "Customer Roles",
+                "Url": "/CustomerRoles/List"
+            }
+        ]
+    },
+    {
+        "SystemName": "settings",
+        "Text": "Settings",
+        "ChildrenNodes": [
+            {
+                "SystemName": "settings:customer",
+                "Text": "Customer Settings",
+                "Url": "/Settings/Customer"
+            }
+        ]
+    }
+]

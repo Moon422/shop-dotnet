@@ -120,7 +120,7 @@ public class AuthenticationService : IAuthenticationService
     public async Task<ResetPasswordRequest?> VerifyResetTokenAsync(string otp, bool ignoreTimeout = false)
     {
         var resetPasswordRequest = await resetPasswordRequestRepository.Table.FirstOrDefaultAsync(rpr => rpr.OtpCode == otp);
-        if (!ignoreTimeout && resetPasswordRequest is null || DateTime.UtcNow > resetPasswordRequest.ValidTill)
+        if (!ignoreTimeout && (resetPasswordRequest is null || DateTime.UtcNow > resetPasswordRequest.ValidTill))
         {
             return null;
         }

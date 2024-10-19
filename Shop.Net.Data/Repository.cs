@@ -22,12 +22,25 @@ public class Repository<T> : IRepository<T> where T : BaseEntity
         dbSet = dbContext.Set<T>();
     }
 
-    public async Task<IList<T>> GetAllAsync(bool sortByIdDesc = true)
+    public async Task<IList<T>> GetAllAsync(bool? sortByIdDesc = null)
     {
-        if (sortByIdDesc)
-            return await Table.OrderByDescending(e => e.Id).ToListAsync();
+        if (sortByIdDesc.HasValue)
+        {
+            if (sortByIdDesc.Value)
+            {
+                return await dbSet
+                    .OrderByDescending(item => item.Id)
+                    .ToListAsync();
+            }
+            else
+            {
+                return await dbSet
+                    .OrderBy(item => item.Id)
+                    .ToListAsync();
+            }
+        }
 
-        return await Table.OrderBy(e => e.Id).ToListAsync();
+        return await dbSet.ToListAsync();
     }
 
     public async Task<PagedList<T>> GetAllAsync(int pageIndex = 0, int pageSize = int.MaxValue, bool sortByIdDesc = true)

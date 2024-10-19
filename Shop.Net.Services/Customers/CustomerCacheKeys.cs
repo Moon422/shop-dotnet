@@ -20,12 +20,21 @@ public static class CustomerCacheKeys
 
     public static CacheKey GetCustomerPermissionsCacheKey => new CacheKey(
     "Shop.Net.Customers.GetCustomerPermissions.{0}", CUSTOMER_PREFIX);
+}
 
-    public const string ROLE_PREFIX = "Shop.Net.Customers.Roles";
+public static class RoleCacheKeys
+{
+    public const string PREFIX = "Shop.Net.Roles";
+
+    public static CacheKey GetRoleByIdCacheKey => new CacheKey(
+        "Shop.Net.Roles.GetRoleById.{0}", PREFIX);
 
     public static CacheKey GetRoleByNameCacheKey => new CacheKey(
-        "Shop.Net.Customers.Roles.GetRoleByName.{0}", ROLE_PREFIX);
+        "Shop.Net.Roles.GetRoleByName.{0}", PREFIX);
 
     public static CacheKey GetRolePermissionsCacheKey => new CacheKey(
-        "Shop.Net.Customers.Roles.GetRolePermissions.{0}", ROLE_PREFIX);
+        "Shop.Net.Roles.GetRolePermissions.{0}", PREFIX);
+
+    public static CacheKey GetAllRolesCacheKey => new CacheKey(
+        "Shop.Net.Roles.GetAllRoles", PREFIX);
 }

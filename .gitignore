@@ -482,4 +482,4 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
-Shop.Net.Web.Admin/Settings/*.json
+Shop.Net.Web.Admin/Settings/CustomerSettings.json

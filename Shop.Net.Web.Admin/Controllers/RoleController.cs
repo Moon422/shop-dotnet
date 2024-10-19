@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Shop.Net.Web.Admin.Attributes;
 using Shop.Net.Web.Admin.Factories;
 using Shop.Net.Web.Admin.Models;
 
@@ -21,15 +22,18 @@ public class RoleController : Controller
         return RedirectToAction("List");
     }
 
+    [PermissionAuthorize("roles:all, roles:view, roles:edit, roles.add, roles.remove")]
     public async Task<IActionResult> List()
     {
         var model = await roleModelFactory.PrepareRoleSearchModelAsync(new RoleSearchModel());
         return View(model);
     }
 
-    [HttpPost, ValidateAntiForgeryToken]
-    public async Task<IActionResult> RoleList(RoleSearchModel roleSearchModel)
-    {
+    // [HttpPost]
+    // [ValidateAntiForgeryToken]
+    // [PermissionAuthorize("roles:all, roles:view, roles:edit, roles.add, roles.remove")]
+    // public async Task<IActionResult> RoleList(RoleSearchModel roleSearchModel)
+    // {
 
-    }
+    // }
 }

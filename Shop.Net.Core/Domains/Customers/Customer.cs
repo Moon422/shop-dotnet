@@ -28,6 +28,8 @@ public class Customer : BaseEntity, ICreationLoggedEntity, IModificationLoggedEn
     public int? DefaultShippingAddressId { get; set; }
     public Address DefaultShippingAddress { get; set; }
 
+    public bool RequireAuthRefresh { get; set; }
+
     public bool IsDeleted { get; set; }
 
     public DateTime CreatedOn { get; set; }

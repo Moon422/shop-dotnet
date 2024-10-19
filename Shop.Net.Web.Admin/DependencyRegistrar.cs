@@ -79,6 +79,8 @@ public static class DependencyRegistrar
 
         ConfigureSettings(services, configuration);
 
+        services.AddSingleton<AuthCookieRefreshHelper>();
+
         services.AddAutoMapper(option => option.AddProfile<AutoMapperProfile>());
 
         services.AddSingleton<IApplicationConfig, ApplicationConfig>();

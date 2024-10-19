@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Shop.Net.Core.Domains.Customers;
 using Shop.Net.Services.Customers;
 
-namespace Shop.Net.Web.Admin.Configurations;
+namespace Shop.Net.Web.Admin.Helpers;
 
 public class AuthCookieRefreshHelper
 {
@@ -35,7 +35,8 @@ public class AuthCookieRefreshHelper
 
         List<Claim> claims = new List<Claim>
         {
-            new Claim(ClaimTypes.Email, customer.Email)
+            new Claim(ClaimTypes.Email, customer.Email),
+            new Claim(CustomClaimTypes.IsPersistent, isPersistent ? "true" : "false")
         };
 
         foreach (var customerRole in customerRoles)

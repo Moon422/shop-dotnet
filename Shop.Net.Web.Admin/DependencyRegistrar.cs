@@ -14,6 +14,7 @@ using Shop.Net.Core.Configurations;
 using Shop.Net.Core.Settings.Attributes;
 using Shop.Net.Data;
 using Shop.Net.Web.Admin.Configurations;
+using Shop.Net.Web.Admin.Helpers;
 
 namespace Shop.Net.Web.Admin;
 
@@ -79,13 +80,13 @@ public static class DependencyRegistrar
 
         ConfigureSettings(services, configuration);
 
-        services.AddSingleton<AuthCookieRefreshHelper>();
-
         services.AddAutoMapper(option => option.AddProfile<AutoMapperProfile>());
 
         services.AddSingleton<IApplicationConfig, ApplicationConfig>();
 
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+
+        services.AddScoped<AuthCookieRefreshHelper>();
 
         Assembly assembly = Assembly.GetExecutingAssembly();
         List<Type> scopedDependencyTypes = assembly.GetTypes()

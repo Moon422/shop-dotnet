@@ -40,7 +40,7 @@ public class PermissionService : IPermissionService
             throw new ArgumentException(nameof(roleId));
         }
 
-        var cacheKey = cacheService.PrepareCacheKey(CustomerCacheKeys.GetRolePermissionsCacheKey,
+        var cacheKey = cacheService.PrepareCacheKey(RoleCacheKeys.GetRolePermissionsCacheKey,
             roleId);
 
         return await cacheService.GetAsync<string>(cacheKey, async () =>

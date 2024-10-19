@@ -12,9 +12,10 @@ using Shop.Net.Core.Domains.Customers;
 using Shop.Net.Core.Settings;
 using Shop.Net.Services.Customers;
 using Shop.Net.Web.Admin.Factories;
+using Shop.Net.Web.Admin.Helpers;
 using Shop.Net.Web.Admin.Models.Auth;
 
-namespace Shop.Net.Web.Admin.Configurations;
+namespace Shop.Net.Web.Admin.Controllers;
 
 public class AuthController : Controller
 {

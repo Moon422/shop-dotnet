@@ -10,5 +10,6 @@ public static class MiddlewareConfigurator
         app.UseAuthentication();
         app.UseAuthorization();
         app.UseMiddleware<ThemeToggleMiddleware>();
+        app.UseMiddleware<AuthRefreshMiddleware>();
     }
 }

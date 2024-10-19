@@ -34,6 +34,7 @@ module.exports = {
         new CopyWebpackPlugin({
             patterns: [
                 { from: './node_modules/jquery/dist', to: path.resolve(__dirname, 'wwwroot/lib/jquery') },
+                { from: './node_modules/js-cookie/dist', to: path.resolve(__dirname, 'wwwroot/lib/js-cookie') },
             ]
         }),
         new MiniCssExtractPlugin({

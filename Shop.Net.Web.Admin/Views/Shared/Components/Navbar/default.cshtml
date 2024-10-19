@@ -1,7 +1,7 @@
 @model NavbarModel
 
 @{
-    var darkMode = Context.Items["dark-mode"];
+    var darkMode = Convert.ToBoolean(Context.Items["dark-mode"]);
 }
 
 <div class="navbar bg-base-200 shadow-md">

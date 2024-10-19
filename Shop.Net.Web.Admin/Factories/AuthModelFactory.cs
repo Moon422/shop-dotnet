@@ -1,10 +1,12 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Shop.Net.Core;
 using Shop.Net.Core.Domains.Customers;
 using Shop.Net.Web.Admin.Models.Auth;
 
 namespace Shop.Net.Web.Admin.Factories;
 
+[ScopeDependency(typeof(IAuthModelFactory))]
 public class AuthModelFactory : IAuthModelFactory
 {
     public async Task<LoginModel> PrepareLoginModelAsync(LoginModel model)

@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Shop.Net.Core;
 using Shop.Net.Core.Domains.Customers;
 using Shop.Net.Data;
 using Shop.Net.Data.Exceptions;
@@ -9,6 +10,7 @@ using Shop.Net.Services.Caching;
 
 namespace Shop.Net.Services.Customers;
 
+[ScopeDependency(typeof(ICustomerService))]
 public class CustomerService : ICustomerService
 {
     protected readonly IRepository<Customer> customerRepository;

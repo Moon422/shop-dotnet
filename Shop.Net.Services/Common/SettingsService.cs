@@ -4,11 +4,13 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Shop.Net.Core;
 using Shop.Net.Core.Settings;
 using Shop.Net.Core.Settings.Attributes;
 
 namespace Shop.Net.Services.Common;
 
+[ScopeDependency(typeof(ISettingsService))]
 public class SettingsService : ISettingsService
 {
     public async Task SaveSettingsAsync(ISettings settings)

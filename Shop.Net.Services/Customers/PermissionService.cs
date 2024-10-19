@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Shop.Net.Core;
 using Shop.Net.Core.Domains.Customers;
 using Shop.Net.Data;
 using Shop.Net.Services.Caching;
@@ -10,6 +11,7 @@ using Shop.Net.Services.Common;
 
 namespace Shop.Net.Services.Customers;
 
+[ScopeDependency(typeof(IPermissionService))]
 public class PermissionService : IPermissionService
 {
     protected readonly IRepository<RolePermission> rolePermissionRepository;

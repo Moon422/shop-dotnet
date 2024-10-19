@@ -1,6 +1,6 @@
 using System;
 
-namespace Shop.Net.Web.Admin.Attributes;
+namespace Shop.Net.Core;
 
 [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
 public class ScopeDependencyAttribute : Attribute

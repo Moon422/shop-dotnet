@@ -4,10 +4,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Primitives;
+using Shop.Net.Core;
 using Shop.Net.Core.Caching;
 
 namespace Shop.Net.Services.Caching;
 
+[ScopeDependency(typeof(ICacheService))]
 public class CacheService : ICacheService
 {
     private readonly Dictionary<string, CancellationTokenSource> cachePrefixCancellationTokens;

@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Shop.Net.Core;
 using Shop.Net.Core.Configurations;
 using Shop.Net.Core.Domains.Customers;
 using Shop.Net.Data;
@@ -8,6 +9,7 @@ using Shop.Net.Services.Caching;
 
 namespace Shop.Net.Services.Customers;
 
+[ScopeDependency(typeof(IPasswordService))]
 public class PasswordService : IPasswordService
 {
     protected readonly IApplicationConfig applicationSettings;

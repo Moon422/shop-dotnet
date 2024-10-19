@@ -6,10 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Newtonsoft.Json;
+using Shop.Net.Core;
 using Shop.Net.Web.Admin.Models.Common;
 
 namespace Shop.Net.Web.Admin.Factories;
 
+[ScopeDependency(typeof(ICommonModelFactory))]
 public class CommonModelFactory : ICommonModelFactory
 {
     protected readonly IUrlHelper urlHelper;

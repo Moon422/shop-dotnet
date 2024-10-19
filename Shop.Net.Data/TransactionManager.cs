@@ -1,8 +1,10 @@
 using System;
 using System.Threading.Tasks;
+using Shop.Net.Core;
 
 namespace Shop.Net.Data;
 
+[ScopeDependency(typeof(ITransactionManager))]
 public class TransactionManager : ITransactionManager
 {
     private ShopDbContext shopDbContext;

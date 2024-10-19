@@ -1,12 +1,14 @@
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Shop.Net.Core;
 using Shop.Net.Core.Domains.Customers;
 using Shop.Net.Services.Common;
 using Shop.Net.Services.Customers;
 
 namespace Shop.Net.Web.Admin.Services;
 
+[ScopeDependency(typeof(IWorkContext))]
 public class WorkContext : IWorkContext
 {
     private readonly IHttpContextAccessor httpContextAccessor;

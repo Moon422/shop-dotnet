@@ -1,26 +1,51 @@
 @model CustomerSettingsModel
 
-<div class="m-4">
-    <div class="flex justify-between">
-        <div>
-            <h1>Customer Setings</h1>
-        </div>
-        <div>
+@{
+    var showSuccessMessage = ViewData.TryGetValue("success-message", out var successMessage);
+    var showErrorMessage = ViewData.ModelState.TryGetValue("error-message", out var errorMessage);
+}
 
-        </div>
+@if (showSuccessMessage)
+{
+    <div class="toast toast-top toast-end">
+    <div class="alert alert-success">
+        <span>@successMessage</span>
     </div>
-    <div class="collapse collapse-plus bg-base-200 mb-4">
-        <input type="radio" name="my-accordion-3" checked="checked" />
-        <div class="collapse-title text-xl font-medium">Customer Registration Settings</div>
-        <div class="collapse-content">
-            <div class="form-control flex-row items-center gap-x-4">
-                <div class="w-1/3 text-end">
-                    <label asp-for="PublicCustomerRegistrationEnabled"></label>
-                </div>
-                <div class="w-2/3">
-                    <input asp-for="PublicCustomerRegistrationEnabled" class="toggle">
+</div>
+}
+else if (showErrorMessage)
+{
+    <div class="toast toast-top toast-end">
+    <div class="alert alert-error">
+        <span>@errorMessage?.Errors.First().ErrorMessage</span>
+    </div>
+</div>
+}
+
+<form asp-action="Customer" asp-controller="Settings">
+    @Html.AntiForgeryToken()
+    <div class="m-4">
+        <div class="flex justify-between items-center mb-4">
+            <div>
+                <h1 class="text-4xl font-medium">Customer Setings</h1>
+            </div>
+            <div class="flex gap-x-4">
+                <button class="btn btn-success">Save</button>
+            </div>
+        </div>
+        <div class="collapse collapse-plus bg-base-200 mb-4">
+            <input type="radio" name="my-accordion-3" checked="checked" />
+            <div class="collapse-title text-xl font-medium">Customer Registration Settings</div>
+            <div class="collapse-content">
+                <div class="form-control flex-row items-center gap-x-4">
+                    <div class="w-1/3 text-end">
+                        <label asp-for="PublicCustomerRegistrationEnabled"></label>
+                    </div>
+                    <div class="w-2/3">
+                        <input asp-for="PublicCustomerRegistrationEnabled" class="toggle">
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</form>

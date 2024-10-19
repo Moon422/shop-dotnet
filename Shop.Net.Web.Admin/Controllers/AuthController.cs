@@ -86,6 +86,7 @@ public class AuthController : Controller
 
     [HttpPost]
     [ActionName("Login")]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> LoginRequest(LoginModel model, string returnUrl = "")
     {
         if (!ModelState.IsValid)
@@ -123,6 +124,7 @@ public class AuthController : Controller
 
     [HttpPost]
     [ActionName("Register")]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> RegisterRequest(RegisterModel model, string returnUrl)
     {
         if (!customerSettings.PublicCustomerRegistrationEnabled)
@@ -173,6 +175,7 @@ public class AuthController : Controller
 
     [HttpPost]
     [ActionName("ResetPassword")]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> ResetPasswordRequest(ResetPasswordRequestModel model)
     {
         if (!ModelState.IsValid)
@@ -210,6 +213,7 @@ public class AuthController : Controller
 
     [HttpPost]
     [ActionName("ResetPasswordNew")]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> ResetPasswordNewRequest(string otp, PasswordModel model)
     {
         if (!ModelState.IsValid)

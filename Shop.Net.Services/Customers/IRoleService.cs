@@ -11,6 +11,7 @@ namespace Shop.Net.Services.Customers;
 public interface IRoleService
 {
     Task<IList<Role>> GetCustomerRolesAsync(int customerId);
+    Task<Role?> GetRoleByNameAsync(string role);
 }
 
 public class RoleService : IRoleService
@@ -38,7 +39,7 @@ public class RoleService : IRoleService
         var cacheKey = cacheService.PrepareCacheKey(CustomerCacheKeys.GetCustomerRolesCacheKey,
             customerId);
 
-        return await cacheService.GetAllAsync<Role>(cacheKey, async () =>
+        return await cacheService.GetAsync<Role>(cacheKey, async () =>
         {
             return await customerRoleMappingRepository.Table
                 .Where(crm => crm.CustomerId == customerId)
@@ -47,6 +48,23 @@ public class RoleService : IRoleService
                     r => r.Id,
                     (crm, r) => r)
                 .ToListAsync();
+        });
+    }
+
+    public async Task<Role?> GetRoleByNameAsync(string roleName)
+    {
+        if (string.IsNullOrWhiteSpace(roleName))
+        {
+            return null;
+        }
+
+        var cacheKey = cacheService.PrepareCacheKey(CustomerCacheKeys.GetRoleByNameCacheKey,
+            roleName);
+
+        return await cacheService.GetAsync(cacheKey, async () =>
+        {
+            return await roleRepository.Table
+                .FirstOrDefaultAsync(role => role.Name == roleName);
         });
     }
 }

@@ -57,7 +57,7 @@ public class PasswordService : IPasswordService
         await passwordRepository.InsertAsync(entity, deferDbInsert);
         if (!deferCacheClear)
         {
-            cacheService.RemoveByPrefix(CustomerCacheKeys.PREFIX);
+            cacheService.RemoveByPrefix(CustomerCacheKeys.CUSTOMER_PREFIX);
         }
     }
 
@@ -68,7 +68,7 @@ public class PasswordService : IPasswordService
         await passwordRepository.UpdateAsync(entity, deferDbUpdate);
         if (!deferCacheClear)
         {
-            cacheService.RemoveByPrefix(CustomerCacheKeys.PREFIX);
+            cacheService.RemoveByPrefix(CustomerCacheKeys.CUSTOMER_PREFIX);
         }
     }
 
@@ -79,7 +79,7 @@ public class PasswordService : IPasswordService
         await passwordRepository.DeleteAsync(entity, deferDbDelete);
         if (!deferCacheClear)
         {
-            cacheService.RemoveByPrefix(CustomerCacheKeys.PREFIX);
+            cacheService.RemoveByPrefix(CustomerCacheKeys.CUSTOMER_PREFIX);
         }
     }
 }

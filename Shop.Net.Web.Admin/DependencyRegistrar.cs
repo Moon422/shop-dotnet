@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -15,6 +16,7 @@ using Shop.Net.Data;
 using Shop.Net.Services.Caching;
 using Shop.Net.Services.Common;
 using Shop.Net.Services.Customers;
+using Shop.Net.Web.Admin.Attributes;
 using Shop.Net.Web.Admin.Configurations;
 using Shop.Net.Web.Admin.Factories;
 using Shop.Net.Web.Admin.Services;
@@ -112,6 +114,23 @@ public static class DependencyRegistrar
 
         services.AddScoped<IAuthModelFactory, AuthModelFactory>();
         services.AddScoped<ICommonModelFactory, CommonModelFactory>();
+
+        Assembly assembly = Assembly.GetExecutingAssembly();
+        List<Type> scopedDependencyTypes = assembly.GetTypes()
+            .Where(t => t.IsClass && t.GetCustomAttribute<ScopeDependencyAttribute>() is not null)
+            .ToList();
+
+        scopedDependencyTypes.AddRange(assembly.GetReferencedAssemblies()
+            .SelectMany(asm => Assembly.Load(asm).GetTypes()
+                .Where(t => t.IsClass && t.GetCustomAttribute<ScopeDependencyAttribute>() is not null)));
+
+        foreach (var scopedDependencyType in scopedDependencyTypes)
+        {
+            if (scopedDependencyType.GetCustomAttribute<ScopeDependencyAttribute>() is ScopeDependencyAttribute sda)
+            {
+                services.AddScoped(sda.InterfaceType, scopedDependencyType);
+            }
+        }
     }
 
     public static void ConfigureApplication(this IApplicationBuilder app)

@@ -19,6 +19,7 @@ public class AuthController : Controller
     protected readonly IPasswordService passwordService;
     protected readonly Net.Services.Customers.IAuthenticationService authenticationService;
     protected readonly IRoleService roleService;
+    protected readonly IPermissionService permissionService;
     protected readonly IAuthModelFactory authModelFactory;
     protected readonly CustomerSettings customerSettings;
 
@@ -26,6 +27,7 @@ public class AuthController : Controller
         IPasswordService passwordService,
         Net.Services.Customers.IAuthenticationService authenticationService,
         IRoleService roleService,
+        IPermissionService permissionService,
         IAuthModelFactory authModelFactory,
         CustomerSettings customerSettings)
     {
@@ -35,6 +37,7 @@ public class AuthController : Controller
         this.authModelFactory = authModelFactory;
         this.customerSettings = customerSettings;
         this.roleService = roleService;
+        this.permissionService = permissionService;
     }
 
     #region Utilities
@@ -44,6 +47,7 @@ public class AuthController : Controller
         ArgumentNullException.ThrowIfNull(customer);
 
         IList<Role> customerRoles = await roleService.GetCustomerRolesAsync(customer.Id);
+        IList<string> customerPermissions = await permissionService.GetCustomerPermissionsAsync(customer.Id);
 
         List<Claim> claims = new List<Claim>
         {
@@ -53,6 +57,11 @@ public class AuthController : Controller
         foreach (var customerRole in customerRoles)
         {
             claims.Add(new Claim(ClaimTypes.Role, customerRole.Name));
+        }
+
+        foreach (var customerPermission in customerPermissions)
+        {
+            claims.Add(new Claim(CustomClaimTypes.Permission, customerPermission));
         }
 
         ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

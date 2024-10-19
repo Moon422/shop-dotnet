@@ -25,11 +25,11 @@ public class CacheService : ICacheService
         return new CacheKey(key, cacheKey.Prefix);
     }
 
-    public async Task<IList<T>> GetAllAsync<T>(CacheKey cacheKey, Func<Task<IList<T>>> dbCall)
+    public async Task<T?> GetAsync<T>(CacheKey cacheKey, Func<Task<T?>> dbCall)
     {
-        if (memoryCache.TryGetValue(cacheKey.Key, out IList<T>? value))
+        if (memoryCache.TryGetValue(cacheKey.Key, out T? value))
         {
-            return value ?? [];
+            return value;
         }
 
         value = await dbCall();
@@ -53,11 +53,11 @@ public class CacheService : ICacheService
         return memoryCache.Set(cacheKey.Key, value, cacheEntryOption);
     }
 
-    public async Task<T?> GetAsync<T>(CacheKey cacheKey, Func<Task<T?>> dbCall)
+    public async Task<IList<T>> GetAsync<T>(CacheKey cacheKey, Func<Task<IList<T>>> dbCall)
     {
-        if (memoryCache.TryGetValue(cacheKey.Key, out T? value))
+        if (memoryCache.TryGetValue(cacheKey.Key, out IList<T>? value))
         {
-            return value;
+            return value ?? [];
         }
 
         value = await dbCall();

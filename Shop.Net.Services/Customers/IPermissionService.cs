@@ -1,22 +1,14 @@
+using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Shop.Net.Core.Domains.Customers;
 
 namespace Shop.Net.Services.Customers;
 
 public interface IPermissionService
 {
+    Task<IList<string>> GetRolePermissionsAsync(int roleId);
 
-}
+    Task<IList<string>> GetCustomerPermissionsAsync(int customerId);
 
-public class PermissionService : IPermissionService
-{
-    public async Task<bool> AuthorizeAsync(string permission)
-    {
-        if (string.IsNullOrWhiteSpace(permission))
-        {
-            return true;
-        }
-
-
-    }
+    Task<bool> AuthorizeCustomerPermissionAsync(string permission);
 }

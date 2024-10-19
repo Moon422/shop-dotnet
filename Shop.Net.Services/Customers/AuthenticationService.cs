@@ -62,7 +62,7 @@ public class AuthenticationService : IAuthenticationService
             await passwordService.InsertPasswordAsync(password, true, true);
         });
 
-        cacheService.RemoveByPrefix(CustomerCacheKeys.PREFIX);
+        cacheService.RemoveByPrefix(CustomerCacheKeys.CUSTOMER_PREFIX);
         return customer;
     }
 

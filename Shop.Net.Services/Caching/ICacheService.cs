@@ -9,9 +9,9 @@ public interface ICacheService
 {
     CacheKey PrepareCacheKey(CacheKey cacheKey, params object[] tokens);
 
-    Task<IList<T>> GetAllAsync<T>(CacheKey cacheKey, Func<Task<IList<T>>> dbCall);
-
     Task<T?> GetAsync<T>(CacheKey cacheKey, Func<Task<T?>> dbCall);
+
+    Task<IList<T>> GetAsync<T>(CacheKey cacheKey, Func<Task<IList<T>>> dbCall);
 
     void Remove(CacheKey cacheKey);
 

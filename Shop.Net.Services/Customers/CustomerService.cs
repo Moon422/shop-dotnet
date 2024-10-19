@@ -73,7 +73,7 @@ public class CustomerService : ICustomerService
         await customerRepository.InsertAsync(customer, deferDbInsert);
         if (!deferCacheClear)
         {
-            cacheService.RemoveByPrefix(CustomerCacheKeys.PREFIX);
+            cacheService.RemoveByPrefix(CustomerCacheKeys.CUSTOMER_PREFIX);
         }
     }
 
@@ -84,7 +84,7 @@ public class CustomerService : ICustomerService
         await customerRepository.UpdateAsync(customer, deferDbUpdate);
         if (!deferCacheClear)
         {
-            cacheService.RemoveByPrefix(CustomerCacheKeys.PREFIX);
+            cacheService.RemoveByPrefix(CustomerCacheKeys.CUSTOMER_PREFIX);
         }
     }
 
@@ -95,7 +95,7 @@ public class CustomerService : ICustomerService
         await customerRepository.DeleteAsync(customer, deferDbDelete);
         if (!deferCacheClear)
         {
-            cacheService.RemoveByPrefix(CustomerCacheKeys.PREFIX);
+            cacheService.RemoveByPrefix(CustomerCacheKeys.CUSTOMER_PREFIX);
         }
     }
 }

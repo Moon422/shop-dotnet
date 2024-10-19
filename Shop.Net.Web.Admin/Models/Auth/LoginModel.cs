@@ -17,4 +17,6 @@ public record LoginModel
 
     [Display(Name = "Remember Me")]
     public bool IsPersistent { get; set; }
+
+    public bool PublicCustomerRegistrationEnabled { get; set; }
 }

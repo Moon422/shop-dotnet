@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Shop.Net.Core;
 using Shop.Net.Core.Domains.Customers;
+using Shop.Net.Core.Settings;
 using Shop.Net.Web.Admin.Models.Auth;
 
 namespace Shop.Net.Web.Admin.Factories;
@@ -9,10 +10,19 @@ namespace Shop.Net.Web.Admin.Factories;
 [ScopeDependency(typeof(IAuthModelFactory))]
 public class AuthModelFactory : IAuthModelFactory
 {
+    protected readonly CustomerSettings customerSettings;
+
+    public AuthModelFactory(CustomerSettings customerSettings)
+    {
+        this.customerSettings = customerSettings;
+    }
+
     public async Task<LoginModel> PrepareLoginModelAsync(LoginModel model)
     {
         if (model is null)
             model = new LoginModel();
+
+        model.PublicCustomerRegistrationEnabled = customerSettings.PublicCustomerRegistrationEnabled;
 
         return model;
     }

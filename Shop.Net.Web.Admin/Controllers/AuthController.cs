@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Shop.Net.Core.Domains.Customers;
 using Shop.Net.Core.Settings;
@@ -111,7 +113,9 @@ public class AuthController : Controller
     public async Task<IActionResult> Register(string returnUrl)
     {
         if (!customerSettings.PublicCustomerRegistrationEnabled)
-            return RedirectToAction("Index", "Home");
+        {
+            return StatusCode((int)HttpStatusCode.MethodNotAllowed);
+        }
 
         var model = await authModelFactory.PrepareRegisterModelAsync(new RegisterModel());
         return View(model);
@@ -122,7 +126,9 @@ public class AuthController : Controller
     public async Task<IActionResult> RegisterRequest(RegisterModel model, string returnUrl)
     {
         if (!customerSettings.PublicCustomerRegistrationEnabled)
-            return RedirectToAction("Index", "Home");
+        {
+            return StatusCode((int)HttpStatusCode.MethodNotAllowed);
+        }
 
         if (string.IsNullOrWhiteSpace(model.Password) || string.IsNullOrWhiteSpace(model.ConfirmPassword) || !string.Equals(model.Password, model.ConfirmPassword))
         {

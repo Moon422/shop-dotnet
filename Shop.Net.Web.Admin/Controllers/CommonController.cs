@@ -20,20 +20,5 @@ public class CommonController : Controller
         this.customerService = customerService;
     }
 
-    public async Task<IActionResult> SwitchTheme(IFormCollection form)
-    {
-        if (form.TryGetValue("dark-model", out var value))
-        {
-            var darkModeEnabled = Convert.ToBoolean(value);
-            if ((await workContext.GetActiveCustomerAsync()) is Customer customer)
-            {
-                customer.Theme = darkModeEnabled ? "dark" : "light";
-                await customerService.UpdateCustomerAsync(customer);
 
-                return Ok();
-            }
-        }
-
-        return BadRequest();
-    }
 }

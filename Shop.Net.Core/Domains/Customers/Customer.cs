@@ -28,9 +28,6 @@ public class Customer : BaseEntity, ICreationLoggedEntity, IModificationLoggedEn
     public int? DefaultShippingAddressId { get; set; }
     public Address DefaultShippingAddress { get; set; }
 
-    [MaxLength(128)]
-    public string Theme { get; set; }
-
     public bool IsDeleted { get; set; }
 
     public DateTime CreatedOn { get; set; }

@@ -7,7 +7,7 @@
 
 @if (showSuccessMessage)
 {
-    <div class="toast toast-top toast-end">
+    <div class="toast">
     <div class="alert alert-success">
         <span>@successMessage</span>
     </div>
@@ -15,7 +15,7 @@
 }
 else if (showErrorMessage)
 {
-    <div class="toast toast-top toast-end">
+    <div class="toast">
     <div class="alert alert-error">
         <span>@errorMessage?.Errors.First().ErrorMessage</span>
     </div>
@@ -49,3 +49,9 @@ else if (showErrorMessage)
         </div>
     </div>
 </form>
+
+<script asp-location="AspLocation.Footer">
+    $(function () {
+        $(".toast").delay(3000).fadeOut(1000);
+    });
+</script>

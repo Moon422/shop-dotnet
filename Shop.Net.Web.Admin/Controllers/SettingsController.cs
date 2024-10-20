@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shop.Net.Core.Settings;
 using Shop.Net.Services.Common;
@@ -10,8 +9,7 @@ using Shop.Net.Web.Admin.Models.Settings;
 
 namespace Shop.Net.Web.Admin.Controllers;
 
-[Authorize]
-public class SettingsController : Controller
+public class SettingsController : BaseController
 {
     protected readonly CustomerSettings customerSettings;
     protected readonly ISettingsService settingsService;

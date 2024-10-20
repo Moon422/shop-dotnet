@@ -8,7 +8,7 @@ using Shop.Net.Services.Customers;
 
 namespace Shop.Net.Web.Admin.Controllers;
 
-public class CommonController : Controller
+public class CommonController : BaseController
 {
     protected readonly IWorkContext workContext;
     protected readonly ICustomerService customerService;

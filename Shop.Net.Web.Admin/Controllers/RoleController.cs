@@ -8,7 +8,7 @@ using Shop.Net.Web.Admin.Models;
 namespace Shop.Net.Web.Admin.Controllers;
 
 [Authorize]
-public class RoleController : Controller
+public class RoleController : BaseController
 {
     protected readonly IRoleModelFactory roleModelFactory;
 

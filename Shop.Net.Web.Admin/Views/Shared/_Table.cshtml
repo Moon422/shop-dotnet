@@ -1,0 +1,49 @@
+@model TableModel
+
+<div class="overflow-x-auto">
+    <table class="table table-xs table-pin-rows table-pin-cols">
+        <thead>
+            <tr>
+                @foreach (var column in Model.Columns)
+                {
+                    <td>@column</td>
+                }
+            </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+    </table>
+</div>
+
+<script asp-location="AspLocation.Footer">
+    $(function () {
+
+    });
+
+    function search() {
+        var columns = [
+    @foreach (var column in Model.Columns)
+    {
+        <text>'@column',</text>
+    }
+        ];
+
+        var postData = {};
+        addCsrfToken(postData);
+        toggleLoader();
+
+        $.ajax({
+            url: '@(Url.Action("List", "Customer"))',
+            type: 'POST',
+            data: postData,
+            success: function (response) {
+
+            },
+            error: function (xhr, status, error) {
+
+            },
+            complete: function (xhr, status) {
+                toggleLoader();
+            }
+        });
+    }
+</script>

@@ -12,10 +12,13 @@
 </head>
 
 <body class="h-screen max-h-screen flex flex-col">
-    <div></div>
+    <div id="backdrop" class="absolute w-screen h-screen z-40 bg-black opacity-50 hidden"></div>
+    <div id="loader" class="absolute z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 hidden">
+        <span class="loading loading-spinner loading-md"></span>
+    </div>
 
     @(await Component.InvokeAsync<NavbarViewComponent>())
-    <div class="flex flex-1">
+    <div class="flex flex-1 bg-white">
         @(await Component.InvokeAsync<SidebarViewComponent>())
         <div class="flex-1">
             <main role="main">
@@ -26,6 +29,16 @@
     <script src="~/lib/jquery/jquery.min.js" asp-append-version="true"></script>
     <script src="~/lib/js-cookie/js.cookie.min.js" asp-append-version="true"></script>
     <script src="~/js/app.bundle.js" asp-append-version="true"></script>
+    <script>
+        function toggleLoader() {
+            $("#backdrop").toggleClass("-z-50").toggleClass("z-40");
+            $("#loader").toggleClass("-z-50").toggleClass("z-50");
+        }
+
+        function addCsrfToken(data) {
+            data["__RequestVerificationToken"] = $('meta[name="csrf-token"]').attr('content');
+        }
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 
     <!-- Render footer scripts -->

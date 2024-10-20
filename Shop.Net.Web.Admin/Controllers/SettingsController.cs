@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shop.Net.Core.Settings;
 using Shop.Net.Services.Common;
-using Shop.Net.Web.Admin.Attributes;
 using Shop.Net.Web.Admin.Factories;
+using Shop.Net.Web.Admin.Filters;
 using Shop.Net.Web.Admin.Models.Settings;
 
 namespace Shop.Net.Web.Admin.Controllers;

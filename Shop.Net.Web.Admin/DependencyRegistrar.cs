@@ -86,8 +86,6 @@ public static class DependencyRegistrar
 
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
-        services.AddScoped<AuthCookieRefreshHelper>();
-
         Assembly assembly = Assembly.GetExecutingAssembly();
         List<Type> scopedDependencyTypes = assembly.GetTypes()
             .Where(t => t.IsClass && t.GetCustomAttribute<ScopeDependencyAttribute>() is not null)

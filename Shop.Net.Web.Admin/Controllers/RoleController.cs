@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Shop.Net.Web.Admin.Attributes;
 using Shop.Net.Web.Admin.Factories;
+using Shop.Net.Web.Admin.Filters;
 using Shop.Net.Web.Admin.Models;
 
 namespace Shop.Net.Web.Admin.Controllers;

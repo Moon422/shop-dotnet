@@ -1,13 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Shop.Net.Core.Domains.Customers;
+using Shop.Net.Services.Common;
 using Shop.Net.Services.Customers;
+using Shop.Net.Web.Admin.Helpers;
 
-namespace Shop.Net.Web.Admin.Attributes;
+namespace Shop.Net.Web.Admin.Filters;
 
 public class PermissionAuthorizeAttribute : TypeFilterAttribute
 {
@@ -16,14 +18,16 @@ public class PermissionAuthorizeAttribute : TypeFilterAttribute
         Arguments = new object[] { permissions };
     }
 
-    public class PermissionAuthorizeFilter : IAuthorizationFilter
+    public class PermissionAuthorizeFilter : IAsyncAuthorizationFilter
     {
         protected readonly IRoleService roleService;
         protected readonly IPermissionService permissionService;
+        protected readonly IWorkContext workContext;
         protected readonly string[] permissions;
 
         public PermissionAuthorizeFilter(string permissions,
             IRoleService roleService,
+            IWorkContext workContext,
             IPermissionService permissionService)
         {
             this.permissions = permissions.Split(',', StringSplitOptions.RemoveEmptyEntries)
@@ -32,13 +36,15 @@ public class PermissionAuthorizeAttribute : TypeFilterAttribute
 
             this.permissionService = permissionService;
             this.roleService = roleService;
+            this.workContext = workContext;
         }
 
-        public async void OnAuthorization(AuthorizationFilterContext context)
+        public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
         {
-            if (!context.HttpContext.User.Identity?.IsAuthenticated ?? true)
+            if ((await workContext.GetActiveCustomerAsync()) is not Customer customer || customer.RequireAuthRefresh)
             {
                 context.Result = new UnauthorizedResult();
+                return;
             }
 
             if (!permissions.Any())
@@ -46,27 +52,16 @@ public class PermissionAuthorizeAttribute : TypeFilterAttribute
                 return;
             }
 
-            ClaimsPrincipal user = context.HttpContext.User;
-
-            IEnumerable<string> roleNames = user.FindAll(ClaimTypes.Role)
-                .Select(rc => rc.Value);
-
-            foreach (var roleName in roleNames)
+            IList<Role> customerRoles = await roleService.GetCustomerRolesAsync(customer.Id);
+            foreach (var customerRole in customerRoles)
             {
-                if ((await roleService.GetRoleByNameAsync(roleName)) is Role role)
+                if ((await permissionService.GetRolePermissionsAsync(customerRole.Id)).Any(rp => permissions.Contains(rp, new RoleEqualityComparer())))
                 {
-                    var rolePermissions = await permissionService.GetRolePermissionsAsync(role.Id);
-                    if (rolePermissions.Any(rolePermission => permissions.Contains(rolePermission)))
-                    {
-                        return;
-                    }
+                    return;
                 }
             }
 
-            IEnumerable<string> permissionNames = user.FindAll(CustomClaimTypes.Permission)
-                .Select(p => p.Value);
-
-            if (permissionNames.Any(p => permissions.Contains(p)))
+            if ((await permissionService.GetCustomerPermissionsAsync(customer.Id)).Any(cp => permissions.Contains(cp, new PermissionEqualityComparer())))
             {
                 return;
             }

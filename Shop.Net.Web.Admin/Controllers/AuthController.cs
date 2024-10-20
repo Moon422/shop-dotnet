@@ -26,7 +26,6 @@ public class AuthController : Controller
     protected readonly IPermissionService permissionService;
     protected readonly IAuthModelFactory authModelFactory;
     protected readonly CustomerSettings customerSettings;
-    protected readonly AuthCookieRefreshHelper authCookieRefreshHelper;
 
     public AuthController(ICustomerService customerService,
         IPasswordService passwordService,
@@ -34,8 +33,7 @@ public class AuthController : Controller
         IRoleService roleService,
         IPermissionService permissionService,
         IAuthModelFactory authModelFactory,
-        CustomerSettings customerSettings,
-        AuthCookieRefreshHelper authCookieRefreshHelper)
+        CustomerSettings customerSettings)
     {
         this.customerService = customerService;
         this.passwordService = passwordService;
@@ -44,7 +42,38 @@ public class AuthController : Controller
         this.customerSettings = customerSettings;
         this.roleService = roleService;
         this.permissionService = permissionService;
-        this.authCookieRefreshHelper = authCookieRefreshHelper;
+    }
+
+    private async Task SignInAsync(Customer customer, bool isPersistent)
+    {
+        ArgumentNullException.ThrowIfNull(customer);
+
+        IList<Role> customerRoles = await roleService.GetCustomerRolesAsync(customer.Id);
+        IList<string> customerPermissions = await permissionService.GetCustomerPermissionsAsync(customer.Id);
+
+        List<Claim> claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.Email, customer.Email),
+            new Claim(CustomClaimTypes.IsPersistent, isPersistent ? "true" : "false")
+        };
+
+        foreach (var customerRole in customerRoles)
+        {
+            claims.Add(new Claim(ClaimTypes.Role, customerRole.Name));
+        }
+
+        foreach (var customerPermission in customerPermissions)
+        {
+            claims.Add(new Claim(CustomClaimTypes.Permission, customerPermission));
+        }
+
+        ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+        AuthenticationProperties authProperties = new AuthenticationProperties
+        {
+            IsPersistent = isPersistent
+        };
+
+        await HttpContext.SignInAsync(new ClaimsPrincipal(claimsIdentity), authProperties);
     }
 
     public async Task<IActionResult> Login(string returnUrl = "")
@@ -70,7 +99,7 @@ public class AuthController : Controller
             return View(model);
         }
 
-        await authCookieRefreshHelper.RefreshCookie(customer, model.IsPersistent);
+        await SignInAsync(customer, model.IsPersistent);
 
         if (string.IsNullOrWhiteSpace(returnUrl))
         {
@@ -126,7 +155,7 @@ public class AuthController : Controller
         };
 
         customer = await authenticationService.RegisterCustomerAsync(customer, password);
-        await authCookieRefreshHelper.RefreshCookie(customer, false);
+        await SignInAsync(customer, false);
 
         if (string.IsNullOrWhiteSpace(returnUrl))
         {
@@ -223,7 +252,7 @@ public class AuthController : Controller
             await passwordService.UpdatePasswordAsync(password);
         }
 
-        await authCookieRefreshHelper.RefreshCookie(customer, false);
+        await SignInAsync(customer, false);
 
         return RedirectToAction("Index", "Home");
     }

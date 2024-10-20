@@ -27,7 +27,7 @@ public class SettingsController : BaseController
         this.settingsService = settingsService;
     }
 
-    [PermissionAuthorize("settings:customers:all, settings:customers:view, settings:customers:edit")]
+    [PermissionAuthorize("settings:customers:all, settings:customers:read, settings:customers:update")]
     public async Task<IActionResult> Customer()
     {
         var model = mapper.Map<CustomerSettingsModel>(customerSettings);
@@ -39,7 +39,7 @@ public class SettingsController : BaseController
     [HttpPost]
     [ActionName("Customer")]
     [ValidateAntiForgeryToken]
-    [PermissionAuthorize("settings:customers:all, settings:customers:edit")]
+    [PermissionAuthorize("settings:customers:all, settings:customers:update")]
     public async Task<IActionResult> SaveCustomerSettings(CustomerSettingsModel model)
     {
         if (!ModelState.IsValid)

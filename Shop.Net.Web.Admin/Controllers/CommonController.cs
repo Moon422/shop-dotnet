@@ -1,8 +1,3 @@
-using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Shop.Net.Core.Domains.Customers;
 using Shop.Net.Services.Common;
 using Shop.Net.Services.Customers;
 

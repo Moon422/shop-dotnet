@@ -24,3 +24,9 @@ else
     <a class="@(Model.SystemName == activeSystemName ? "active" : "")" href="@Model.Url">@Model.Text</a>
 </li>
 }
+
+<script asp-location="AspLocation.Footer">
+    $(function () {
+        $('details:has(a.active)').attr('open', true);
+    })
+</script>

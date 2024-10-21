@@ -11,12 +11,12 @@
             {
                 "SystemName": "customers:list",
                 "Text": "Customers",
-                "Url": "/Customers/List"
+                "Url": "/Customer/List"
             },
             {
-                "SystemName": "customers:customerroles",
+                "SystemName": "customerroles:list",
                 "Text": "Customer Roles",
-                "Url": "/CustomerRoles/List"
+                "Url": "/CustomerRole/List"
             }
         ]
     },

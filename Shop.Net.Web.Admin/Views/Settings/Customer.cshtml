@@ -1,6 +1,9 @@
 @model CustomerSettingsModel
 
 @{
+    ViewData["Title"] = "Customer Settings";
+    ViewData["sidebar-active-system-name"] = "settings:customer";
+
     var showSuccessMessage = ViewData.TryGetValue("success-message", out var successMessage);
     var showErrorMessage = ViewData.ModelState.TryGetValue("error-message", out var errorMessage);
 }

@@ -1,0 +1,15 @@
+@model CustomerSearchModel
+
+@{
+    ViewData["Title"] = "Customers List";
+    ViewData["sidebar-active-system-name"] = "customers:list";
+
+    var tableModel = new TableModel()
+            {
+                Columns = ["Id", "FirstName", "LastName"]
+            };
+}
+
+<div class="m-4">
+    @await Html.PartialAsync("_Table", tableModel)
+</div>

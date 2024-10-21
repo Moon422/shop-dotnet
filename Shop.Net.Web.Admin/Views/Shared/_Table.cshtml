@@ -16,16 +16,15 @@
 
 <script asp-location="AspLocation.Footer">
     $(function () {
-
+        search()
     });
 
     function search() {
-        var columns = [
-    @foreach (var column in Model.Columns)
+        var columns = [@foreach (var column in Model.Columns)
     {
         <text>'@column',</text>
-    }
-        ];
+    }];
+        var tableBody = $('#table-body');
 
         var postData = {};
         addCsrfToken(postData);
@@ -36,7 +35,17 @@
             type: 'POST',
             data: postData,
             success: function (response) {
-
+                console.log(response);
+                $.each(response, function (row) {
+                    var tr = $('<tr>');
+                    $.each(columns, function (col) {
+                        tr.append($('<td>', {
+                            'text': row[col]
+                        }));
+                    });
+                    console.log(tr);
+                    tableBody.append(tr);
+                });
             },
             error: function (xhr, status, error) {
 

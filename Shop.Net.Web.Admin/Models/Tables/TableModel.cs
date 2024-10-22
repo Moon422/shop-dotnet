@@ -4,5 +4,6 @@ namespace Shop.Net.Web.Admin.Models.Common;
 
 public record TableModel : BaseModel
 {
-    public IList<string> Columns { get; set; }
+    public string Identifier { get; set; }
+    public IList<TableCellModel> Columns { get; set; }
 }

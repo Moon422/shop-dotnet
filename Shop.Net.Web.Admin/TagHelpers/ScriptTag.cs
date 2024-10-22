@@ -1,52 +1,58 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace Shop.Net.Web.Admin.TagHelpers;
-
-[HtmlTargetElement("script", Attributes = "asp-location")]
-public class ScriptTagHelper : TagHelper
+namespace Shop.Net.Web.Admin.TagHelpers
 {
-    private static readonly List<string> HeadScripts = [];
-    private static readonly List<string> FooterScripts = [];
-
-    [HtmlAttributeName("asp-location")] public AspLocation? Location { get; set; }
-
-    public override void Process(TagHelperContext context, TagHelperOutput output)
+    [HtmlTargetElement("script", Attributes = "asp-location")]
+    public class ScriptTagHelper : TagHelper
     {
-        if (!Location.HasValue) return;
+        private static readonly List<string> HeadScripts = new();
+        private static readonly List<string> FooterScripts = new();
 
-        var scriptContent = output.GetChildContentAsync().Result.GetContent();
-        switch (Location)
+        [HtmlAttributeName("asp-location")] public AspLocation? Location { get; set; }
+
+        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            case AspLocation.Head:
-                HeadScripts.Add(scriptContent);
-                break;
-            case AspLocation.Footer:
-                FooterScripts.Add(scriptContent);
-                break;
+            if (!Location.HasValue) return;
+
+            // Get the full script tag with its content
+            var scriptContent = await output.GetChildContentAsync();
+            var scriptTag = scriptContent.GetContent();
+            switch (Location)
+            {
+                case AspLocation.Head:
+                    HeadScripts.Add(scriptTag);
+                    break;
+                case AspLocation.Footer:
+                    FooterScripts.Add(scriptTag);
+                    break;
+            }
+
+            // Suppress the output so it doesn't render where it is defined
+            output.SuppressOutput();
         }
 
-        output.SuppressOutput();
-    }
+        // Render each script as its own <script> tag
+        public static string RenderHeadScripts()
+        {
+            if (!HeadScripts.Any())
+                return string.Empty;
 
-    public static string RenderHeadScripts()
-    {
-        if (!HeadScripts.Any())
-            return string.Empty;
+            var scripts = string.Join("\n", HeadScripts.Select(script => $"<script>{script}</script>"));
+            HeadScripts.Clear();
+            return scripts;
+        }
 
-        var scripts = string.Join("\n", HeadScripts);
-        HeadScripts.Clear();
-        return $"<script>\n{scripts}\n</script>";
-    }
+        public static string RenderFooterScripts()
+        {
+            if (!FooterScripts.Any())
+                return string.Empty;
 
-    public static string RenderFooterScripts()
-    {
-        if (!FooterScripts.Any())
-            return string.Empty;
-
-        var scripts = string.Join("\n", FooterScripts);
-        FooterScripts.Clear();
-        return $"<script>\n{scripts}\n</script>";
+            var scripts = string.Join("\n", FooterScripts.Select(script => $"<script>{script}</script>"));
+            FooterScripts.Clear();
+            return scripts;
+        }
     }
 }

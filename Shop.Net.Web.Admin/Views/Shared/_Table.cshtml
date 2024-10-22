@@ -1,12 +1,12 @@
 @model TableModel
 
-<div class="overflow-x-auto">
+<div id="@Model.Identifier" class="overflow-x-auto">
     <table class="table table-xs table-pin-rows table-pin-cols">
         <thead>
             <tr>
                 @foreach (var column in Model.Columns)
                 {
-                    <td>@column</td>
+                    <td>@column.Title</td>
                 }
             </tr>
         </thead>
@@ -16,15 +16,22 @@
 
 <script asp-location="AspLocation.Footer">
     $(function () {
-        search()
+        search_@(Model.Identifier)()
     });
 
-    function search() {
-        var columns = [@foreach (var column in Model.Columns)
-    {
-        <text>'@column',</text>
-    }];
-        var tableBody = $('#table-body');
+    function search_@(Model.Identifier)() {
+        // var columns = [@foreach (var column in Model.Columns) { <text>['@column.PropertyName', @column.Renderer.Render(Model.Identifier)],</text> }];
+        var columnRenderer = [
+            @foreach (var columnModel in Model.Columns)
+            {
+                <text>{
+                    propertyName: '@columnModel.PropertyName',
+                    rendererCallback: @columnModel.Renderer.Render(Model.Identifier),
+                    classNames: '@columnModel.ClassNames'
+                },</text>
+            }
+        ]
+        var tableBody = $('#@(@Model.Identifier) #table-body');
 
         var postData = {};
         addCsrfToken(postData);
@@ -35,17 +42,22 @@
             type: 'POST',
             data: postData,
             success: function (response) {
-                console.log(response);
-                $.each(response, function (row) {
+                var tempTblBody = $('<tbody>', {
+                    id: 'table-body'
+                })
+                $.each(response, function (rowIdx) {
+                    var rowData = response[rowIdx];
                     var tr = $('<tr>');
-                    $.each(columns, function (col) {
-                        tr.append($('<td>', {
-                            'text': row[col]
-                        }));
+                    $.each(columnRenderer, function (colIdx) {
+                        var td = $('<td>', {
+                            html: columnRenderer[colIdx].rendererCallback(rowData, columnRenderer[colIdx].propertyName, rowIdx, colIdx),
+                            class: columnRenderer[colIdx].classNames
+                        });
+                        tr.append(td);
                     });
-                    console.log(tr);
-                    tableBody.append(tr);
+                    tempTblBody.append(tr);
                 });
+                tableBody.replaceWith(tempTblBody);
             },
             error: function (xhr, status, error) {
 
@@ -55,4 +67,13 @@
             }
         });
     }
+
+    function renderText_@(Model.Identifier)(rowData, propertyName, rowIdx, colIdx) {
+        return "<div>" + rowData[propertyName] + "</div>";
+    }
+
+    @* @foreach (var column in Model.Columns)
+    {
+        <text>@column.Renderer.Render(Model.Identifier)</text>
+    } *@
 </script>

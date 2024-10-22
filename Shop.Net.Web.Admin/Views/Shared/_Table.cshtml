@@ -12,6 +12,18 @@
         </thead>
         <tbody id="table-body"></tbody>
     </table>
+    <div class="flex justify-between">
+        <div>
+            <select class="select select-bordered w-full max-w-xs" id="table-page-size" asp-items="@Model.AvailablePageSizes">
+            </select>
+        </div>
+        <div class="join" id="table-page">
+            @* <button class="join-item btn">1</button>
+            <button class="join-item btn btn-active">2</button>
+            <button class="join-item btn">3</button>
+            <button class="join-item btn">4</button> *@
+        </div>
+    </div>
 </div>
 
 <script asp-location="AspLocation.Footer">
@@ -32,13 +44,18 @@
             }
         ]
         var tableBody = $('#@(@Model.Identifier) #table-body');
+        var tablePage = $('#table-page');
 
-        var postData = {};
+        var postData = {
+            'PageIndex': 1,
+            'PageSize': 5
+        };
+        
         addCsrfToken(postData);
         toggleLoader();
 
         $.ajax({
-            url: '@(Url.Action("List", "Customer"))',
+            url: '@Model.ReadUrl',
             type: 'POST',
             data: postData,
             success: function (response) {
@@ -46,7 +63,7 @@
                     id: 'table-body'
                 })
                 $.each(response, function (rowIdx) {
-                    var rowData = response[rowIdx];
+                    var rowData = response.Data[rowIdx];
                     var tr = $('<tr>');
                     $.each(columnRenderer, function (colIdx) {
                         var td = $('<td>', {
@@ -58,6 +75,25 @@
                     tempTblBody.append(tr);
                 });
                 tableBody.replaceWith(tempTblBody);
+
+                var pageSelectorTemp = $('<div>', {
+                    id: 'table-page',
+                    class: 'join'
+                });
+
+                for (var i = 0; i < response.NumberOfPages; i++) {
+                    var pageElement = $('<button>', {
+                        class: 'join-item btn'
+                    });
+
+                    if (i === response.PageIndex) {
+                        pageElement.addClass('active');
+                    }
+
+                    pageSelectorTemp.append(pageElement);
+                }
+
+                tablePage.replaceWith(pageSelectorTemp);
             },
             error: function (xhr, status, error) {
 

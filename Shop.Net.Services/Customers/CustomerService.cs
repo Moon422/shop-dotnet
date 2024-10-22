@@ -100,4 +100,64 @@ public class CustomerService : ICustomerService
             cacheService.RemoveByPrefix(CustomerCacheKeys.CUSTOMER_PREFIX);
         }
     }
+
+    public async Task<PagedList<Customer>> SearchCustomerAsync(string firstName = "",
+        string lastName = "",
+        int genderId = 0,
+        string phoneNumber = "",
+        string email = "",
+        bool hideInactive = true,
+        int pageIndex = 0,
+        int pageSize = int.MaxValue)
+    {
+        if (pageIndex < 0)
+        {
+            throw new ArgumentException(nameof(pageIndex));
+        }
+
+        if (pageSize <= 0)
+        {
+            throw new ArgumentException(nameof(pageSize));
+        }
+
+        var query = customerRepository.Table;
+
+        if (hideInactive)
+        {
+            query = query.Where(c => !c.IsDeleted);
+        }
+
+        if (!string.IsNullOrWhiteSpace(firstName))
+        {
+            query = query.Where(c => c.FirstName.Contains(firstName));
+        }
+
+        if (!string.IsNullOrWhiteSpace(lastName))
+        {
+            query = query.Where(c => c.LastName.Contains(lastName));
+        }
+
+        if (!string.IsNullOrWhiteSpace(phoneNumber))
+        {
+            query = query.Where(c => c.PhoneNumber.Contains(phoneNumber));
+        }
+
+        if (!string.IsNullOrWhiteSpace(email))
+        {
+            query = query.Where(c => c.Email.Contains(email));
+        }
+
+        var data = await query.OrderBy(c => c.Id)
+            .Skip(pageIndex)
+            .Take(pageSize)
+            .ToListAsync();
+
+        return new PagedList<Customer>
+        {
+            Data = data,
+            PageIndex = pageIndex,
+            TotalItemCount = await customerRepository.Table.CountAsync(),
+            MaximumPageItemCount = pageSize
+        };
+    }
 }

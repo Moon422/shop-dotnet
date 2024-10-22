@@ -7,6 +7,7 @@
     var tableModel = new TableModel()
     {
         Identifier = "customerlist",
+        ReadUrl = Url.Action("List", "Customer") ?? "",
         Columns = new List<TableCellModel>()
         {
             new TableCellModel()
@@ -30,36 +31,9 @@
                 Renderer = new TableCellTextRenderer()
             }
         }
-    };
-
-    var tableModel2 = new TableModel()
-    {
-        Identifier = "customerlist2",
-        Columns = new List<TableCellModel>()
-        {
-            new TableCellModel()
-            {
-                PropertyName = nameof(CustomerModel.Email),
-                Title = "Email",
-                Renderer = new TableCellTextRenderer()
-            },
-            new TableCellModel()
-            {
-                PropertyName = nameof(CustomerModel.PhoneNumber),
-                Title = "Phone number",
-                Renderer = new TableCellTextRenderer()
-            },
-            new TableCellModel()
-            {
-                PropertyName = nameof(CustomerModel.LastName),
-                Title = "Last name",
-                Renderer = new TableCellTextRenderer()
-            }
-        }
-    };
+    };    
 }
 
 <div class="m-4">
     @await Html.PartialAsync("_Table", tableModel)
-    @await Html.PartialAsync("_Table", tableModel2)
 </div>

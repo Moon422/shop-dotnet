@@ -9,6 +9,7 @@ module.exports = {
   theme: {
     extend: {},
   },
+  safelist: ['join', 'join-item', 'btn', 'btn-active', 'text-center'],
   plugins: [
     daisyui,
   ],
@@ -16,4 +17,3 @@ module.exports = {
     themes: ["light", "dark"],
   },
 }
-

@@ -8,6 +8,7 @@
     {
         Identifier = "customerlist",
         ReadUrl = Url.Action("List", "Customer") ?? "",
+        AvailablePageSizes = Model.AvailabePageSizes,
         Columns = new List<TableCellModel>()
         {
             new TableCellModel()
@@ -27,7 +28,7 @@
             {
                 PropertyName = nameof(CustomerModel.LastName),
                 Title = "Last name",
-                ClassNames = "text-center bg-red-500",
+                ClassNames = "text-center",
                 Renderer = new TableCellTextRenderer()
             }
         }

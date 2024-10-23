@@ -18,21 +18,24 @@
             </select>
         </div>
         <div class="join" id="table-page">
-            @* <button class="join-item btn">1</button>
-            <button class="join-item btn btn-active">2</button>
-            <button class="join-item btn">3</button>
-            <button class="join-item btn">4</button> *@
+            @* <button class="join-item btn">1</button> *@
+            @* <button class="join-item btn btn-active">2</button> *@
+            @* <button class="join-item btn">3</button> *@
+            @* <button class="join-item btn">4</button> *@
         </div>
     </div>
 </div>
 
 <script asp-location="AspLocation.Footer">
     $(function () {
-        search_@(Model.Identifier)()
+        search_@(Model.Identifier)(1);
+
+        $("#table-page-size").on("change", search_@(Model.Identifier))
     });
 
-    function search_@(Model.Identifier)() {
-        // var columns = [@foreach (var column in Model.Columns) { <text>['@column.PropertyName', @column.Renderer.Render(Model.Identifier)],</text> }];
+    function search_@(Model.Identifier)(pageIndex) {
+        var pageSize = $("#table-page-size").val();
+
         var columnRenderer = [
             @foreach (var columnModel in Model.Columns)
             {
@@ -42,13 +45,14 @@
                     classNames: '@columnModel.ClassNames'
                 },</text>
             }
-        ]
+        ];
+
         var tableBody = $('#@(@Model.Identifier) #table-body');
         var tablePage = $('#table-page');
 
         var postData = {
-            'PageIndex': 1,
-            'PageSize': 5
+            'PageIndex': pageIndex,
+            'PageSize': pageSize
         };
         
         addCsrfToken(postData);
@@ -59,10 +63,12 @@
             type: 'POST',
             data: postData,
             success: function (response) {
+                console.log(response);
+
                 var tempTblBody = $('<tbody>', {
                     id: 'table-body'
                 })
-                $.each(response, function (rowIdx) {
+                $.each(response.Data, function (rowIdx) {
                     var rowData = response.Data[rowIdx];
                     var tr = $('<tr>');
                     $.each(columnRenderer, function (colIdx) {
@@ -80,18 +86,38 @@
                     id: 'table-page',
                     class: 'join'
                 });
+                
+                var pageElement = $('<button>', {
+                    class: 'join-item btn',
+                    text: '«'
+                });
+                pageSelectorTemp.append(pageElement);
 
-                for (var i = 0; i < response.NumberOfPages; i++) {
-                    var pageElement = $('<button>', {
-                        class: 'join-item btn'
-                    });
+                if (response.NumberOfPages > 1) {
+                    
 
-                    if (i === response.PageIndex) {
-                        pageElement.addClass('active');
+                    for (var i = 0; i < response.NumberOfPages; i++) {
+                        pageElement = $('<button>', {
+                            class: 'join-item btn',
+                            text: i + 1
+                        });
+
+                        if (i === response.PageIndex) {
+                            console.log("I am here");
+                            pageElement.addClass('btn-active');
+                        }
+
+                        pageSelectorTemp.append(pageElement);
                     }
 
-                    pageSelectorTemp.append(pageElement);
+                    
                 }
+                
+                var pageElement = $('<button>', {
+                    class: 'join-item btn',
+                    text: '»'
+                });
+                pageSelectorTemp.append(pageElement);
 
                 tablePage.replaceWith(pageSelectorTemp);
             },
@@ -107,9 +133,4 @@
     function renderText_@(Model.Identifier)(rowData, propertyName, rowIdx, colIdx) {
         return "<div>" + rowData[propertyName] + "</div>";
     }
-
-    @* @foreach (var column in Model.Columns)
-    {
-        <text>@column.Renderer.Render(Model.Identifier)</text>
-    } *@
 </script>
